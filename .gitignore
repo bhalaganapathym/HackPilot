@@ -37,6 +37,3 @@ __pycache__/
 Thumbs.db
 .vscode/
 .idea/
-
-# Archives & Builds
-*.zip
