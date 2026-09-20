@@ -1,0 +1,35 @@
+﻿# Dependencies
+node_modules/
+backend/venv/
+venv/
+.venv/
+backend/dist/
+dist/
+
+# Next.js & Frontend
+frontend/.next/
+frontend/out/
+frontend/build/
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.pytest_cache/
+*.egg-info/
+
+# Environment
+.env*.local
+*.pem
+*.key
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
