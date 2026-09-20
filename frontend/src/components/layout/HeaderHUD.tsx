@@ -12,7 +12,6 @@ import {
   VolumeX,
   Compass,
   MoreHorizontal,
-  Command,
   Users
 } from "lucide-react";
 import { api, ProfileResponse } from "@/lib/api";

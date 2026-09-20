@@ -38,7 +38,12 @@ def log(msg):
     print(f"[deploy-live] {msg}", flush=True)
 
 def get_session():
-    return boto3.Session(profile_name=PROFILE, region_name=REGION)
+    if os.environ.get("AWS_ACCESS_KEY_ID"):
+        return boto3.Session(region_name=REGION)
+    try:
+        return boto3.Session(profile_name=PROFILE, region_name=REGION)
+    except Exception:
+        return boto3.Session(region_name=REGION)
 
 def read_env_value(name: str, *files: str) -> str | None:
     if os.environ.get(name):
