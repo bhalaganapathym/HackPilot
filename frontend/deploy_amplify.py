@@ -57,9 +57,12 @@ def get_lambda_url(cli_url: str | None) -> str:
     return "http://localhost:8000/api"
 
 
-# ─── Step 2: Build ────────────────────────────────────────────────────────────
 def build_frontend(lambda_url: str):
-    api_url = lambda_url.rstrip("/") + "/api"
+    base = lambda_url.rstrip("/")
+    if base.endswith("/api"):
+        api_url = base
+    else:
+        api_url = base + "/api"
     log(f"Building with NEXT_PUBLIC_API_URL={api_url}")
 
     env = {**os.environ, "NEXT_PUBLIC_API_URL": api_url}

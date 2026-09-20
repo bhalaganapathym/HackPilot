@@ -237,16 +237,16 @@ def main():
     # Step 3: Launch backend EC2
     inst_id, public_ip = launch_backend_ec2(session)
 
-    # Save backend URL
-    backend_api_url = f"http://{public_ip}:8000/api"
+    # Save backend URL (use CloudFront HTTPS to prevent browser mixed content blocking)
+    cloudfront_domain = "https://dw5virp5mxy8d.cloudfront.net"
     with open("lambda_url.txt", "w") as f:
-        f.write(f"http://{public_ip}:8000")
+        f.write(cloudfront_domain)
 
-    # Step 4: Wait for health check
+    # Step 4: Wait for health check on direct EC2 IP
     wait_for_health(public_ip)
 
-    # Step 5: Deploy Frontend
-    amplify_url = deploy_frontend(backend_api_url)
+    # Step 5: Deploy Frontend with CloudFront HTTPS URL
+    amplify_url = deploy_frontend(f"{cloudfront_domain}/api")
 
     # Step 6: Smoke Test
     log("Running smoke test on live deployment...")
