@@ -24,9 +24,12 @@ build/
 hackpilot-frontend.zip
 hackpilot-backend-src.zip
 
-# Ephemeral Deployment Outputs
+# Ephemeral Deployment & Status Outputs
 backend/lambda_url.txt
 frontend/amplify_url.txt
+lambda_url.txt
+amplify_url.txt
+status
 
 # Python
 __pycache__/
@@ -39,15 +42,18 @@ __pycache__/
 htmlcov/
 
 # Databases & Ephemeral Storage
+*.db
 *.sqlite
 *.sqlite3
 *.db-journal
 *.db-shm
 *.db-wal
+hackpilot.db
 
 # Environment & Secrets
-.env*.local
-.env.ec2
+.env
+.env.*
+!.env.example
 *.pem
 *.key
 *.crt

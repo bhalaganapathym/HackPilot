@@ -19,6 +19,9 @@ dist/
 *.zip
 *.tar.gz
 
+# ephemeral deployment files
+amplify_url.txt
+
 # misc
 .DS_Store
 Thumbs.db
@@ -31,8 +34,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# local env files
-.env*.local
+# environment & secrets
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel

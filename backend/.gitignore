@@ -15,11 +15,13 @@ env/
 ENV/
 
 # Local database & temp files
+*.db
 *.sqlite
 *.sqlite3
 *.db-journal
 *.db-shm
 *.db-wal
+hackpilot.db
 
 # Build & Archives
 dist/
@@ -30,8 +32,9 @@ build/
 # Deployment outputs
 lambda_url.txt
 
-# Local secrets
-.env.local
-.env.ec2
+# Environment & Secrets
+.env
+.env.*
+!.env.example
 *.pem
 *.key
