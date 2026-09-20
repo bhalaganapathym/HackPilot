@@ -9,7 +9,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.core.config import settings
 from app.db import init_db
-from app.routers import health, abstract, problem, redteam, gamification, submissions, stream, organizer, judge_simulator
+from app.routers import health, abstract, problem, redteam, gamification, submissions, stream, organizer, judge_simulator, duel, rapid_fire, pitch_deck
 
 # Setup logging
 logging.basicConfig(
@@ -108,6 +108,9 @@ app.include_router(submissions.router, prefix=settings.API_V1_STR)
 app.include_router(stream.router, prefix=settings.API_V1_STR)
 app.include_router(organizer.router, prefix=settings.API_V1_STR)
 app.include_router(judge_simulator.router, prefix=settings.API_V1_STR)
+app.include_router(duel.router, prefix=settings.API_V1_STR)
+app.include_router(rapid_fire.router, prefix=settings.API_V1_STR)
+app.include_router(pitch_deck.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 async def root():

@@ -453,5 +453,201 @@ export const api = {
     return () => {
       eventSource.close();
     };
+  },
+
+  async analyzeDuel(payload: DuelRequest): Promise<DuelResponse> {
+    const res = await fetch(`${API_BASE_URL}/duel/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<DuelResponse>(res);
+  },
+
+  async evaluateRapidFire(payload: RapidFireEvaluateRequest): Promise<RapidFireResponse> {
+    const res = await fetch(`${API_BASE_URL}/rapid-fire/evaluate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<RapidFireResponse>(res);
+  },
+
+  async uploadAndAnalyzePitchDeck(formData: FormData): Promise<PitchDeckResponse> {
+    const res = await fetch(`${API_BASE_URL}/pitch-deck/analyze`, {
+      method: "POST",
+      body: formData,
+    });
+    return handleResponse<PitchDeckResponse>(res);
+  },
+
+  async getPitchDeck(deckId: string): Promise<PitchDeckResponse> {
+    const res = await fetch(`${API_BASE_URL}/pitch-deck/${deckId}`);
+    return handleResponse<PitchDeckResponse>(res);
+  },
+
+  async getPitchDeckBySubmission(submissionId: string): Promise<PitchDeckResponse> {
+    const res = await fetch(`${API_BASE_URL}/pitch-deck/submission/${submissionId}`);
+    return handleResponse<PitchDeckResponse>(res);
   }
 };
+
+// ─── Idea Duel Types ─────────────────────────────────────────────────────────
+export interface IdeaInput {
+  title: string;
+  description: string;
+  tech_stack?: string;
+  target_users?: string;
+}
+
+export interface DuelRequest {
+  idea_a: IdeaInput;
+  idea_b: IdeaInput;
+  problem_statement?: string;
+  submission_id?: string;
+}
+
+export interface IdeaEvaluation {
+  strengths: string[];
+  risks: string[];
+  differentiation_signals: string[];
+  judge_questions: string[];
+}
+
+export interface DimensionComparison {
+  trade_offs: string[];
+  stronger_evidence_needed: string[];
+  primary_risks: string[];
+  area_requiring_validation: string[];
+}
+
+export interface ComparisonSummary {
+  problem_strength: DimensionComparison;
+  differentiation: DimensionComparison;
+  technical_feasibility: DimensionComparison;
+  impact: DimensionComparison;
+}
+
+export interface DuelAnalysisOutput {
+  idea_a: IdeaEvaluation;
+  idea_b: IdeaEvaluation;
+  comparison: ComparisonSummary;
+  shared_risks: string[];
+  improvement_opportunities: string[];
+}
+
+export interface DuelResponse {
+  duel_id: string;
+  analysis: DuelAnalysisOutput;
+  gamification?: GamificationResult | null;
+  created_at: string;
+}
+
+// ─── Rapid Fire Types ────────────────────────────────────────────────────────
+export interface RapidFireEvaluateRequest {
+  pitch_text: string;
+  submission_id?: string;
+  project_title?: string;
+  abstract_context?: string;
+  time_taken_seconds?: number;
+}
+
+export interface RapidFireScores {
+  problem_clarity: number;
+  solution_clarity: number;
+  differentiation: number;
+  technical_explanation: number;
+  impact: number;
+  conciseness: number;
+  judge_readiness: number;
+}
+
+export interface RapidFireAnalysisOutput {
+  scores: RapidFireScores;
+  strengths: string[];
+  weaknesses: string[];
+  specific_improvements: string[];
+  suggested_revised_opening: string;
+  suggested_revised_closing: string;
+}
+
+export interface RapidFireResponse {
+  session_id: string;
+  pitch_text: string;
+  time_taken_seconds: number;
+  analysis: RapidFireAnalysisOutput;
+  gamification?: GamificationResult | null;
+  created_at: string;
+}
+
+// ─── Pitch Deck Analyzer Types ───────────────────────────────────────────────
+export interface SlideAnalysis {
+  slide_number: number;
+  slide_title: string;
+  purpose: string;
+  clarity: string;
+  problem_communication?: string | null;
+  solution_communication?: string | null;
+  technical_explanation?: string | null;
+  information_density: string;
+  missing_information?: string | null;
+  potential_judge_questions: string[];
+  improvement_suggestions: string[];
+}
+
+export interface EvidenceGap {
+  claim: string;
+  evidence_found: string;
+  status: string;
+  recommendation: string;
+}
+
+export interface CategorizedJudgeQuestions {
+  technical: string[];
+  product: string[];
+  impact: string[];
+  innovation: string[];
+  aws: string[];
+  feasibility: string[];
+  scalability: string[];
+}
+
+export interface PrioritizedRecommendations {
+  high_priority: string[];
+  medium_priority: string[];
+  low_priority: string[];
+}
+
+export interface DeckCategoryScores {
+  problem_and_impact: number;
+  innovation: number;
+  technical_implementation: number;
+  aws_usage: number;
+  feasibility: number;
+  presentation_readiness: number;
+}
+
+export interface DeckAnalysisOutput {
+  slide_analyses: SlideAnalysis[];
+  problem_summary: string;
+  solution_summary: string;
+  innovation_summary: string;
+  technical_summary: string;
+  aws_usage_summary: string;
+  presentation_quality: string;
+  evidence_gaps: EvidenceGap[];
+  judge_questions: CategorizedJudgeQuestions;
+  recommendations: PrioritizedRecommendations;
+  category_scores: DeckCategoryScores;
+}
+
+export interface PitchDeckResponse {
+  deck_id: string;
+  submission_id?: string | null;
+  file_name: string;
+  s3_key: string;
+  page_count: number;
+  analysis: DeckAnalysisOutput;
+  gamification?: GamificationResult | null;
+  created_at: string;
+}

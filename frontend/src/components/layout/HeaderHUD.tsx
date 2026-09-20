@@ -167,6 +167,36 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
             >
               Judge Sim
             </Link>
+            <Link
+              href="/duel"
+              className={`px-2.5 py-1 rounded-lg transition-colors ${
+                pathname === "/duel"
+                  ? "text-yellow-400 bg-yellow-500/10 font-semibold"
+                  : "text-text-muted hover:text-text-primary"
+              }`}
+            >
+              Duel
+            </Link>
+            <Link
+              href="/rapid-fire"
+              className={`px-2.5 py-1 rounded-lg transition-colors ${
+                pathname === "/rapid-fire"
+                  ? "text-orange-400 bg-orange-500/10 font-semibold"
+                  : "text-text-muted hover:text-text-primary"
+              }`}
+            >
+              Rapid Fire
+            </Link>
+            <Link
+              href="/pitch-deck"
+              className={`px-2.5 py-1 rounded-lg transition-colors ${
+                pathname === "/pitch-deck"
+                  ? "text-indigo-400 bg-indigo-500/10 font-semibold"
+                  : "text-text-muted hover:text-text-primary"
+              }`}
+            >
+              Pitch Deck
+            </Link>
 
           </nav>
         </div>

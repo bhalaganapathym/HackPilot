@@ -9,6 +9,8 @@ import {
   HelpCircle,
   ShieldAlert,
   Gavel,
+  Swords,
+  Zap,
   ArrowRight,
   Flame,
   CheckCircle2
@@ -235,6 +237,78 @@ export default function HomePage() {
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-violet hover:underline"
             >
               <span>Practice Trial</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+        </div>
+
+        {/* New Tools Row */}
+        <div className="gsap-reveal text-xs font-semibold uppercase tracking-wider text-text-tertiary mt-6">
+          Advanced Toolkit
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Card 5: Idea Duel */}
+          <div className="gsap-reveal rounded-3xl bg-surface border border-border p-5 shadow-card flex flex-col justify-between gap-5 hover:border-yellow-500/40 transition-colors">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center">
+                <Swords size={20} />
+              </div>
+              <h3 className="text-base font-bold text-text-primary">
+                Idea Duel
+              </h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Compare two project concepts head-to-head across 5 strategic dimensions. Diagnostic trade-off analysis — no arbitrary winners.
+              </p>
+            </div>
+            <Link
+              href="/duel"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-yellow-400 hover:underline"
+            >
+              <span>Start Duel</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+
+          {/* Card 6: 60-Second Rapid Fire */}
+          <div className="gsap-reveal rounded-3xl bg-surface border border-border p-5 shadow-card flex flex-col justify-between gap-5 hover:border-orange-500/40 transition-colors">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 flex items-center justify-center">
+                <Zap size={20} />
+              </div>
+              <h3 className="text-base font-bold text-text-primary">
+                60-Second Rapid Fire
+              </h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Sharpen your investor pitch in 60 seconds. Timed phase prompts, 7-dimension AI scoring, and coaching tips for every segment.
+              </p>
+            </div>
+            <Link
+              href="/rapid-fire"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-400 hover:underline"
+            >
+              <span>Start Pitch</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+
+          {/* Card 7: Pitch Deck Analyzer */}
+          <div className="gsap-reveal rounded-3xl bg-surface border border-border p-5 shadow-card flex flex-col justify-between gap-5 hover:border-indigo-500/40 transition-colors">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+                <FileText size={20} />
+              </div>
+              <h3 className="text-base font-bold text-text-primary">
+                Pitch Deck Analyzer
+              </h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Upload your PDF deck for slide-by-slide clarity scoring, evidence gap detection, AWS usage audit, and judge question prep.
+              </p>
+            </div>
+            <Link
+              href="/pitch-deck"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:underline"
+            >
+              <span>Analyze Deck</span>
               <ArrowRight size={13} />
             </Link>
           </div>

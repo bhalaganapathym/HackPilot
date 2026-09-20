@@ -194,6 +194,261 @@ class MockProvider(AIProvider):
                         "final_verdict": "Demonstrates strong technical command of distributed systems and AWS serverless boundaries. Ready for live panel demo day." if is_concluded else None,
                         "composite_score": 88 if is_concluded else None,
                     }
+                elif feature == "idea_duel":
+                    raw_dict = {
+                        "idea_a": {
+                            "strengths": [
+                                "Immediate localized deployment scope with clear operational boundaries.",
+                                "Direct measurable cost-savings feedback loop for stakeholders."
+                            ],
+                            "risks": [
+                                "High dependency on third-party hardware integration and physical maintenance.",
+                                "Adoption resistance from manual facility operators."
+                            ],
+                            "differentiation_signals": [
+                                "Applies automated sensor telemetry rather than periodic manual sampling.",
+                                "Edge-based anomaly detection reducing uplink bandwidth requirements."
+                            ],
+                            "judge_questions": [
+                                "How do you handle sensor calibration drift over a 6-month operational window?",
+                                "What is the unit economics breakdown including cellular IoT data charges?"
+                            ]
+                        },
+                        "idea_b": {
+                            "strengths": [
+                                "Pure software architecture enabling rapid zero-marginal-cost scaling.",
+                                "Leverages existing server infrastructure without capital expenditure."
+                            ],
+                            "risks": [
+                                "Intense incumbent competition from existing cloud telemetry dashboards.",
+                                "Cold-start data deficiency before statistical baselines are established."
+                            ],
+                            "differentiation_signals": [
+                                "Multi-modal correlation across weather, occupancy, and spot-pricing streams.",
+                                "Automated policy enactment rather than passive recommendation alerts."
+                            ],
+                            "judge_questions": [
+                                "How do you establish baseline power consumption models before historical data exists?",
+                                "Why would an enterprise adopt this rather than native AWS Cost Explorer anomaly detection?"
+                            ]
+                        },
+                        "comparison": {
+                            "problem_strength": {
+                                "trade_offs": [
+                                    "Idea A addresses physical resource waste directly, while Idea B optimizes intangible operational expenditures."
+                                ],
+                                "stronger_evidence_needed": [
+                                    "Idea A requires audited pilot field trial data; Idea B requires verified API integrations with utility telemetry."
+                                ],
+                                "primary_risks": [
+                                    "Physical equipment tampering (Idea A) vs API credential deprecation (Idea B)."
+                                ],
+                                "area_requiring_validation": [
+                                    "Operator compliance speed (Idea A) vs model false-positive tolerance (Idea B)."
+                                ]
+                            },
+                            "differentiation": {
+                                "trade_offs": [
+                                    "Idea A builds an operational barrier to entry through hardware lock-in; Idea B gains agility through software-only velocity."
+                                ],
+                                "stronger_evidence_needed": [
+                                    "Side-by-side benchmark against existing off-the-shelf smart facilities software."
+                                ],
+                                "primary_risks": [
+                                    "Idea A risks supply-chain lockup; Idea B risks rapid feature replication by cloud providers."
+                                ],
+                                "area_requiring_validation": [
+                                    "Willingness to sign multi-year maintenance SLA (Idea A) vs self-serve onboarding rate (Idea B)."
+                                ]
+                            },
+                            "technical_feasibility": {
+                                "trade_offs": [
+                                    "Idea A has lower algorithmic complexity but higher hardware logistics; Idea B has simple deployment but complex time-series inference."
+                                ],
+                                "stronger_evidence_needed": [
+                                    "Working end-to-end telemetry packet trace from ingress to database."
+                                ],
+                                "primary_risks": [
+                                    "Network dropouts at edge nodes (Idea A) vs database throughput spikes under batch ingestion (Idea B)."
+                                ],
+                                "area_requiring_validation": [
+                                    "Microcontroller firmware reliability (Idea A) vs DynamoDB partition key distribution (Idea B)."
+                                ]
+                            },
+                            "impact": {
+                                "trade_offs": [
+                                    "Idea A yields visible, tangible community impact; Idea B yields high-volume quantifiable balance-sheet savings."
+                                ],
+                                "stronger_evidence_needed": [
+                                    "Third-party emissions reduction calculation or carbon offset audit."
+                                ],
+                                "primary_risks": [
+                                    "Localized ceiling on single-campus deployment (Idea A) vs distributed organizational inertia (Idea B)."
+                                ],
+                                "area_requiring_validation": [
+                                    "User behavioral shift longevity (Idea A) vs executive dashboard engagement retention (Idea B)."
+                                ]
+                            }
+                        },
+                        "shared_risks": [
+                            "Both concepts rely heavily on continuous telemetry data streams and risk degraded utility if input pipelines experience network dropouts.",
+                            "Both require domain-specific calibration before achieving reliable autonomous decision-making."
+                        ],
+                        "improvement_opportunities": [
+                            "Integrate a unified digital twin simulator so prospective users can preview projected savings prior to full physical rollout.",
+                            "Establish automated fallback policies that gracefully defer to manual operational schedules whenever confidence metrics drop below 90%."
+                        ]
+                    }
+                elif feature == "rapid_fire":
+                    raw_dict = {
+                        "scores": {
+                            "problem_clarity": 8,
+                            "solution_clarity": 8,
+                            "differentiation": 7,
+                            "technical_explanation": 8,
+                            "impact": 9,
+                            "conciseness": 8,
+                            "judge_readiness": 8,
+                        },
+                        "strengths": [
+                            "Visceral opening establishing measurable customer pain immediately.",
+                            "Clear distinction between manual friction and automated cloud workflow.",
+                            "Strong articulation of two-sided platform value proposition."
+                        ],
+                        "weaknesses": [
+                            "Middle 15 seconds lists multiple technical acronyms without connecting them to user experience.",
+                            "Closing sentence trails off without an explicit call to action or demo anchor."
+                        ],
+                        "specific_improvements": [
+                            "Replace the list of three database engines with the single latency metric your pipeline guarantees.",
+                            "Clarify target customer persona in the first 8 seconds before introducing the technical architecture.",
+                            "Anchor the closing statement around the live interactive demo the judges are about to inspect."
+                        ],
+                        "suggested_revised_opening": "Every hackathon weekend, 500 teams lose hours deciphering vague requirements and dreading adversarial judge panels. We built HackPilot to turn that friction into a real-time gamified co-pilot.",
+                        "suggested_revised_closing": "By combining Bedrock-powered threat modeling with anti-burnout judging telemetry, HackPilot turns chaotic demo days into deterministic, high-signal showcases."
+                    }
+                elif feature == "pitch_deck":
+                    raw_dict = {
+                        "slide_analyses": [
+                            {
+                                "slide_number": 1,
+                                "slide_title": "Title & Executive Vision",
+                                "purpose": "Hook the jury and frame the overarching value proposition",
+                                "clarity": "High clarity, minimal text clutter with crisp branding",
+                                "problem_communication": "Implicitly introduces the problem domain",
+                                "solution_communication": "States the core product metaphor cleanly",
+                                "technical_explanation": None,
+                                "information_density": "Balanced",
+                                "missing_information": "Could include team member roles or institution affiliation",
+                                "potential_judge_questions": [
+                                    "What is the single core metric that proves this vision in 48 hours?"
+                                ],
+                                "improvement_suggestions": [
+                                    "Add a one-line subtitle defining the exact problem domain."
+                                ]
+                            },
+                            {
+                                "slide_number": 2,
+                                "slide_title": "The Problem Landscape",
+                                "purpose": "Articulate user pain points and urgency",
+                                "clarity": "Solid narrative flow but lacks quantitative scale",
+                                "problem_communication": "Strong focus on participant anxiety and judge fatigue",
+                                "solution_communication": None,
+                                "technical_explanation": None,
+                                "information_density": "Balanced",
+                                "missing_information": "Specific dollar or hour metrics lost per hackathon",
+                                "potential_judge_questions": [
+                                    "Have you interviewed real organizers to validate that fatigue causes biased scoring?"
+                                ],
+                                "improvement_suggestions": [
+                                    "Incorporate one concrete benchmark: '40% of judging scores degrade after hour 4'."
+                                ]
+                            },
+                            {
+                                "slide_number": 3,
+                                "slide_title": "Technical Architecture",
+                                "purpose": "Demonstrate engineering feasibility and AWS integration",
+                                "clarity": "Clean architectural diagram showing dataflow",
+                                "problem_communication": None,
+                                "solution_communication": "Shows decoupled ingestion and inference workers",
+                                "technical_explanation": "Detailed breakdown of Bedrock, DynamoDB, and S3",
+                                "information_density": "Balanced",
+                                "missing_information": "Fallback handling under Bedrock 429 throttling",
+                                "potential_judge_questions": [
+                                    "Why was DynamoDB single-table selected over an RDS relational schema for submission state?"
+                                ],
+                                "improvement_suggestions": [
+                                    "Highlight the circuit-breaker fallback to SQLite."
+                                ]
+                            }
+                        ],
+                        "problem_summary": "The deck clearly pinpoints the dual-sided friction of hackathons: participant anxiety and organizer burnout.",
+                        "solution_summary": "Presents a compelling, two-sided co-pilot architecture combining interactive participant training with automated organizer clustering.",
+                        "innovation_summary": "Strong novelty in turning abstract review into gamified quests and using Titan V2 embeddings for anti-burnout judging dossiers.",
+                        "technical_summary": "Well-conceived cloud architecture leveraging FastAPI, Amazon Bedrock Nova Pro, DynamoDB single-table persistence, and S3 artifacts.",
+                        "aws_usage_summary": "Amazon Bedrock (Nova Pro + Titan Embeddings V2), Amazon DynamoDB, and Amazon S3 are meaningfully integrated into the core workflows.",
+                        "presentation_quality": "High narrative momentum with clean typographical hierarchy. Slide density remains balanced across all sections.",
+                        "evidence_gaps": [
+                            {
+                                "claim": "Sub-second real-time judging simulation",
+                                "evidence_found": "No latency benchmark diagram or CloudWatch percentile traces included in the deck.",
+                                "status": "Evidence gap",
+                                "recommendation": "Add a benchmark callout noting average Bedrock Converse latency (p50: 850ms, p95: 1.4s)."
+                            },
+                            {
+                                "claim": "Zero hallucination risk",
+                                "evidence_found": "Absolute claim not substantiated by automated validation tests in slide text.",
+                                "status": "Needs clarification",
+                                "recommendation": "Clarify that strict JSON Schema validation and string-grounding constraints mitigate hallucination."
+                            }
+                        ],
+                        "judge_questions": {
+                            "technical": [
+                                "How do you maintain session state if a participant loses connection mid-duel?",
+                                "What is your database partition key strategy for high-concurrency demo day writes?"
+                            ],
+                            "product": [
+                                "How do you ensure participants do not overfit their pitch to the AI judge rather than human judges?"
+                            ],
+                            "impact": [
+                                "What is the measurable improvement in project quality after completing 3 practice rounds?"
+                            ],
+                            "innovation": [
+                                "What makes this two-sided architecture fundamentally different from standard ChatGPT wrappers?"
+                            ],
+                            "aws": [
+                                "Why did you choose Titan Text Embeddings V2 over open-source local embeddings?",
+                                "How does your S3 artifact layout support lifecycle transitions for large hackathons?"
+                            ],
+                            "feasibility": [
+                                "Can the full end-to-end flow run reliably within AWS Free Tier limits?"
+                            ],
+                            "scalability": [
+                                "How does the clustering service perform when evaluating 500+ submissions simultaneously?"
+                            ]
+                        },
+                        "recommendations": {
+                            "high_priority": [
+                                "Replace generic adjectives with concrete metrics on the Problem slide.",
+                                "Add the circuit-breaker fallback mechanism to the Architecture diagram."
+                            ],
+                            "medium_priority": [
+                                "Include 1 slide showing live user quotes or participant feedback from initial trials.",
+                                "Clarify why Titan V2 512-dimension vectors were chosen for cluster distance metrics."
+                            ],
+                            "low_priority": [
+                                "Increase font contrast on slide 3 footnote labels."
+                            ]
+                        },
+                        "category_scores": {
+                            "problem_and_impact": 88,
+                            "innovation": 90,
+                            "technical_implementation": 86,
+                            "aws_usage": 92,
+                            "feasibility": 85,
+                            "presentation_readiness": 89
+                        }
+                    }
                 else:
                     raise ValueError(f"Unknown feature: {feature}")
 

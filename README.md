@@ -4,7 +4,14 @@
 > *"Calm Core, Vivid Moments"* — Built with Apple Human Interface Principles for the AWS Hackathon Jury.
 
 HackPilot turns hackathon friction into an engaging, gamified experience while giving organizers and judges deep automated intelligence:
-1. **For Participants:** Instant pitch refinement with 5-metric scoring and weakness quests, truthful challenge statement decoding, a 7-domain Red Team stress-testing arena, and real-time rehearsal against 3 distinct AI Judge archetypes.
+1. **For Participants:**
+   - **Abstract Analyzer:** Instant pitch refinement with 5-metric scoring, weakness quests, and XP rewards.
+   - **Problem Statement Explainer & Q&A:** Truthful challenge statement decoding, requirements checklist, and Q&A.
+   - **Idea Red Team Arena:** 7-domain architectural stress-testing arena with survival HP and rated rebuttals.
+   - **AI Judge Simulator:** Rehearse live demo Q&A under pressure against 3 distinct AI judge archetypes.
+   - **Idea Duel:** Head-to-head architectural trade-off comparison across 5 dimensions with zero arbitrary winners.
+   - **60-Second Rapid Fire:** Timed 60s elevator pitch practice with segment coaching tips and 7-dimension AI scoring.
+   - **Pitch Deck Analyzer:** Slide-by-slide PDF pitch deck analysis, evidence gap detection, and judge prep.
 2. **For Organizers:** Automated submission ingestion, semantic clustering via Amazon Titan Text Embeddings V2 & K-Means, Differentiation Dossiers, and evidence-backed Judge Dossiers with custom questions.
 
 ---
@@ -15,7 +22,7 @@ HackPilot turns hackathon friction into an engaging, gamified experience while g
 | :--- | :--- | :--- |
 | **Frontend Web App** | AWS Amplify Hosting | **[https://main.d1mlf5y8eyh58y.amplifyapp.com](https://main.d1mlf5y8eyh58y.amplifyapp.com)** |
 | **Backend HTTPS API** | Amazon CloudFront CDN | **[https://dw5virp5mxy8d.cloudfront.net/api](https://dw5virp5mxy8d.cloudfront.net/api)** |
-| **Interactive API Docs**| FastAPI Swagger UI | **[http://13.220.200.19:8000/docs](http://13.220.200.19:8000/docs)** |
+| **Interactive API Docs**| FastAPI Swagger UI | **[http://98.84.5.142:8000/docs](http://98.84.5.142:8000/docs)** |
 | **API Health Check** | FastAPI Service | **[https://dw5virp5mxy8d.cloudfront.net/api/health](https://dw5virp5mxy8d.cloudfront.net/api/health)** |
 
 ---
@@ -118,7 +125,7 @@ Open **`http://localhost:3000`** in your browser.
 
 ## 🛠️ Development & Testing Commands
 
-### Run Full Pytest Suite (45 Tests)
+### Run Full Pytest Suite (52 Tests)
 ```bash
 cd backend
 pytest tests/ -v
@@ -175,8 +182,9 @@ HackPilot is engineered to minimize AWS costs and stay strictly within the AWS F
 
 ---
 
-## ⚠️ Current Limitations & Roadmap
+## ⚠️ Architectural Scope & Intentional Design Decisions
 
-- **Model Context Clamping:** Prompts are defensively truncated at 5,000 characters to prevent prompt injection and token budget overruns.
+- **Demo Video Analyzer Intentionally Excluded:** Video transcription/computer vision (AWS Transcribe, Rekognition) is deliberately excluded from scope to prevent uncontrolled cloud billing, high processing latencies (>2 minutes/submission), and heavy dependencies. Pitch evaluation is focused on text, slide decks (pypdf), and timed Q&A rehearsal.
+- **Model Context Clamping:** Prompts are defensively truncated at 5,000–12,000 characters to prevent prompt injection and token budget overruns.
 - **Single-Table DynamoDB Schema:** Optimized for submission indexing and organizer queries; fine-grained user authentication (Cognito) is intentionally decoupled as per project architecture rules.
 - **WebSocket Streaming:** Real-time AI thinking tokens utilize high-speed polling / Server-Sent Events rather than persistent WebSockets to maximize compatibility with serverless and CDN edge caching.

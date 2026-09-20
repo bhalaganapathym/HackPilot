@@ -253,7 +253,7 @@ def main():
     subprocess.run([sys.executable, "verify_deployment.py"], cwd=os.getcwd())
 
     print("\n" + "="*70)
-    print("🚀 HACKPILOT IS LIVE!")
+    print(">> HACKPILOT IS LIVE!")
     print("="*70)
     print(f"  Frontend (AWS Amplify): {amplify_url}")
     print(f"  Backend API (FastAPI):  {backend_api_url}")

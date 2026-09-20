@@ -12,6 +12,8 @@ import {
   Compass,
   Volume2,
   Moon,
+  Swords,
+  Zap,
   X
 } from "lucide-react";
 import { sounds } from "@/lib/sounds";
@@ -81,6 +83,36 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       perform: () => {
         onClose();
         router.push("/organizer");
+      },
+    },
+    {
+      id: "duel",
+      title: "Go to Idea Duel",
+      category: "Navigation",
+      icon: Swords,
+      perform: () => {
+        onClose();
+        router.push("/duel");
+      },
+    },
+    {
+      id: "rapid-fire",
+      title: "Go to 60-Second Rapid Fire",
+      category: "Navigation",
+      icon: Zap,
+      perform: () => {
+        onClose();
+        router.push("/rapid-fire");
+      },
+    },
+    {
+      id: "pitch-deck",
+      title: "Go to Pitch Deck Analyzer",
+      category: "Navigation",
+      icon: FileText,
+      perform: () => {
+        onClose();
+        router.push("/pitch-deck");
       },
     },
 

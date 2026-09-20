@@ -41,6 +41,24 @@ INITIAL_BADGES = [
         "name": "Unbreakable",
         "description": "Repelled all Red Team attacks and preserved your survival HP.",
         "icon": "award"
+    },
+    {
+        "id": "idea_duelist",
+        "name": "Idea Jouster",
+        "description": "Pitted two concepts in an Idea Duel to expose risks and differentiation.",
+        "icon": "swords"
+    },
+    {
+        "id": "rapid_fire_champ",
+        "name": "Speed Demon",
+        "description": "Completed a high-pressure 60-second rapid fire elevator pitch challenge.",
+        "icon": "zap"
+    },
+    {
+        "id": "deck_master",
+        "name": "Pitch Ready",
+        "description": "Audited a complete pitch deck artifact with AI slide and evidence gap analysis.",
+        "icon": "presentation"
     }
 ]
 

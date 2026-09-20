@@ -97,6 +97,9 @@ class BedrockProvider(AIProvider):
             "judge_simulator": settings.MAX_IDEA_LENGTH,
             "judge_dossier": settings.MAX_ABSTRACT_LENGTH,
             "differentiation": settings.MAX_ABSTRACT_LENGTH * 2,
+            "idea_duel": settings.MAX_IDEA_LENGTH * 2,
+            "rapid_fire": settings.MAX_IDEA_LENGTH + 1000,
+            "pitch_deck": 12000,
         }
         max_chars = char_limits.get(feature, 4000)
         safe_user_text = self._truncate_input(user_text, max_chars)
@@ -228,6 +231,18 @@ class BedrockProvider(AIProvider):
             ),
             "judge_simulator": (
                 "Think aloud briefly as an AI judge selecting the most probing challenge question."
+            ),
+            "idea_duel": (
+                "You are comparing two hackathon ideas. Think aloud briefly (3-4 sentences) "
+                "about the fundamental architectural and problem-space trade-offs between them."
+            ),
+            "rapid_fire": (
+                "You are a pitch coach. Think aloud briefly (2-3 sentences) evaluating the "
+                "hook, clarity, and judge punch of this 60-second delivery."
+            ),
+            "pitch_deck": (
+                "Think aloud briefly (3-4 sentences) auditing the slide narrative, identifying "
+                "evidence gaps, and verifying claimed technical architecture."
             ),
         }
         stream_prompt = streaming_prompts.get(
