@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Local database & temp files
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Build & Archives
+dist/
+build/
+*.zip
+*.tar.gz
+
+# Deployment outputs
+lambda_url.txt
+
+# Local secrets
+.env.local
+.env.ec2
+*.pem
+*.key
