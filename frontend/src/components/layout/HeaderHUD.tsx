@@ -16,6 +16,7 @@ import {
   Users
 } from "lucide-react";
 import { api, ProfileResponse } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 import { sounds } from "@/lib/sounds";
 import { BadgeItem } from "../common/BadgeItem";
 import { SegmentedControl } from "../common/SegmentedControl";
@@ -31,6 +32,7 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const auth = useAuth();
 
   const [profile, setProfile] = useState<ProfileResponse | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
@@ -93,6 +95,13 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
   };
 
   const isOrganizer = pathname.startsWith("/organizer");
+  const gamification = auth.profile?.gamification;
+  const xpLevel = gamification?.level ?? profile?.level ?? 1;
+  const totalXp = gamification?.total_xp ?? profile?.total_xp ?? 0;
+  const streakDays = gamification?.current_streak ?? profile?.streak_days ?? 1;
+  const progressPercent = gamification?.progress_percent ?? profile?.progress_percent ?? 30;
+  const nextLevelXp = gamification?.next_level_xp ?? profile?.next_level_xp ?? 100;
+  const badges = gamification?.badges ?? profile?.badges ?? [];
 
   const handleModeChange = (mode: "participant" | "organizer") => {
     if (mode === "organizer") {
@@ -107,119 +116,132 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
   const leaguePlayers = [
     { rank: 1, name: "team_hyperion", xp: 1420, active: false },
     { rank: 2, name: "hack_ninja", xp: 1180, active: false },
-    { rank: 3, name: "You (Pilot)", xp: profile?.total_xp || 350, active: true },
+    { rank: 3, name: auth.profile?.username ? `@${auth.profile.username}` : "You (Pilot)", xp: totalXp || 350, active: true },
     { rank: 4, name: "dev_sprint", xp: 290, active: false },
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-bg/80 backdrop-blur-md transition-colors">
-      <div className="max-w-[1120px] mx-auto px-4 h-14 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#0A0A0A]/80 backdrop-blur-2xl transition-colors">
+      <div className="max-w-[1200px] mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Brand / Logo */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 group focus-visible:outline-none">
-            <div className="w-7 h-7 rounded-lg bg-text-primary text-bg flex items-center justify-center font-bold text-sm tracking-tighter transition-transform group-hover:scale-105">
+          <Link href="/" className="flex items-center gap-2.5 group focus-visible:outline-none">
+            <div className="w-8 h-8 rounded-full bg-cyber-yellow text-black flex items-center justify-center font-black text-xs tracking-wider shadow-yellow-glow group-hover:scale-105 active:scale-95 transition-all">
               HP
             </div>
-            <span className="font-semibold text-base tracking-tight text-text-primary">
-              HackPilot
-            </span>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-base tracking-tight text-white group-hover:text-cyber-yellow transition-colors leading-tight">
+                HackPilot
+              </span>
+              <span className="text-[9px] uppercase tracking-widest text-zinc-400 font-semibold leading-none">
+                AI Co-Pilot
+              </span>
+            </div>
           </Link>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 text-xs font-medium">
+          {/* Navigation Links - Pill Style */}
+          <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold">
             <Link
               href="/abstract"
-              className={`px-2.5 py-1 rounded-lg transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full transition-all active:scale-95 ${
                 pathname === "/abstract"
-                  ? "text-accent-blue bg-accent-blue/10"
-                  : "text-text-muted hover:text-text-primary"
+                  ? "bg-cyber-yellow text-black shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white hover:bg-white/10"
               }`}
             >
               Abstract
             </Link>
             <Link
               href="/problem"
-              className={`px-2.5 py-1 rounded-lg transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full transition-all active:scale-95 ${
                 pathname === "/problem"
-                  ? "text-accent-amber bg-accent-amber/10"
-                  : "text-text-muted hover:text-text-primary"
+                  ? "bg-cyber-yellow text-black shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white hover:bg-white/10"
               }`}
             >
               Problem
             </Link>
             <Link
               href="/redteam"
-              className={`px-2.5 py-1 rounded-lg transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full transition-all active:scale-95 ${
                 pathname === "/redteam"
-                  ? "text-accent-coral bg-accent-coral/10"
-                  : "text-text-muted hover:text-text-primary"
+                  ? "bg-cyber-yellow text-black shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white hover:bg-white/10"
               }`}
             >
               Red Team
             </Link>
             <Link
               href="/judge"
-              className={`px-2.5 py-1 rounded-lg transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full transition-all active:scale-95 ${
                 pathname === "/judge"
-                  ? "text-accent-violet bg-accent-violet/10 font-semibold"
-                  : "text-text-muted hover:text-text-primary"
+                  ? "bg-cyber-yellow text-black shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white hover:bg-white/10"
               }`}
             >
               Judge Sim
             </Link>
             <Link
               href="/duel"
-              className={`px-2.5 py-1 rounded-lg transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full transition-all active:scale-95 ${
                 pathname === "/duel"
-                  ? "text-yellow-400 bg-yellow-500/10 font-semibold"
-                  : "text-text-muted hover:text-text-primary"
+                  ? "bg-cyber-yellow text-black shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white hover:bg-white/10"
               }`}
             >
               Duel
             </Link>
             <Link
               href="/rapid-fire"
-              className={`px-2.5 py-1 rounded-lg transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full transition-all active:scale-95 ${
                 pathname === "/rapid-fire"
-                  ? "text-orange-400 bg-orange-500/10 font-semibold"
-                  : "text-text-muted hover:text-text-primary"
+                  ? "bg-cyber-yellow text-black shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white hover:bg-white/10"
               }`}
             >
               Rapid Fire
             </Link>
             <Link
               href="/pitch-deck"
-              className={`px-2.5 py-1 rounded-lg transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full transition-all active:scale-95 ${
                 pathname === "/pitch-deck"
-                  ? "text-indigo-400 bg-indigo-500/10 font-semibold"
-                  : "text-text-muted hover:text-text-primary"
+                  ? "bg-cyber-yellow text-black shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white hover:bg-white/10"
               }`}
             >
               Pitch Deck
             </Link>
-
+            <Link
+              href="/leaderboard"
+              className={`px-3.5 py-1.5 rounded-full transition-all active:scale-95 ${
+                pathname === "/leaderboard"
+                  ? "bg-cyber-yellow text-black shadow-md font-bold"
+                  : "text-zinc-400 hover:text-white hover:bg-white/10"
+              }`}
+            >
+              Leaderboard
+            </Link>
           </nav>
         </div>
 
         {/* Right HUD elements */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
           {/* Quick Command Key Hint */}
           <button
             type="button"
             onClick={onOpenCommandPalette}
-            className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-lg border border-border bg-fill/50 text-[11px] text-text-muted hover:text-text-primary hover:bg-fill transition-colors focus-visible:outline-none"
+            className="hidden sm:flex items-center px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-[11px] text-zinc-400 hover:text-white hover:bg-white/10 transition-all active:scale-95 focus-visible:outline-none"
             title="Open Command Palette (Cmd/Ctrl + K)"
           >
-            <Command size={11} />
-            <span>K</span>
+            <span className="font-mono">⌘K</span>
           </button>
 
-          {/* Compact HUD Trigger: XP Ring + Streak */}
+          {/* Compact HUD Trigger: XP Ring + Streak in Glass Pill */}
           <div className="relative" ref={popoverRef}>
             <button
               type="button"
               onClick={() => setShowProfilePopover(!showProfilePopover)}
-              className="flex items-center gap-2 p-1.5 rounded-full hover:bg-fill transition-colors border border-border/60 focus-visible:outline-none"
+              className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all border border-white/15 focus-visible:outline-none active:scale-95"
             >
               {/* Mini Level Circle */}
               <div className="relative w-6 h-6 flex items-center justify-center">
@@ -228,7 +250,7 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
                     cx="12"
                     cy="12"
                     r="10"
-                    stroke="var(--fill)"
+                    stroke="#262626"
                     strokeWidth="2.5"
                     fill="none"
                   />
@@ -236,23 +258,23 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
                     cx="12"
                     cy="12"
                     r="10"
-                    stroke="var(--accent-green)"
+                    stroke="#FDE047"
                     strokeWidth="2.5"
                     fill="none"
                     strokeDasharray={62.8}
-                    strokeDashoffset={62.8 - ((profile?.progress_percent || 30) / 100) * 62.8}
+                    strokeDashoffset={62.8 - (progressPercent / 100) * 62.8}
                     strokeLinecap="round"
                   />
                 </svg>
-                <span className="absolute text-[10px] font-mono font-bold text-text-primary">
-                  {profile?.level || 1}
+                <span className="absolute text-[10px] font-mono font-black text-white">
+                  {xpLevel}
                 </span>
               </div>
 
               {/* Streak Flame */}
-              <div className="flex items-center gap-1 pr-1.5 text-xs font-mono font-semibold text-accent-amber">
-                <Flame size={13} className="fill-accent-amber" />
-                <span>{profile?.streak_days || 1}</span>
+              <div className="flex items-center gap-1 text-xs font-mono font-bold text-cyber-yellow">
+                <Flame size={13} className="fill-cyber-yellow" />
+                <span>{streakDays}d</span>
               </div>
             </button>
 
@@ -260,52 +282,52 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
             <AnimatePresence>
               {showProfilePopover && (
                 <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 10, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-80 p-4 rounded-2xl bg-surface border border-border shadow-popover z-50 text-text-primary"
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute right-0 mt-3 w-88 p-5 rounded-[32px] bg-void-charcoal/95 border border-white/20 shadow-2xl backdrop-blur-2xl z-50 text-white"
                 >
                   {/* Popover Header */}
-                  <div className="flex items-center justify-between pb-3 border-b border-border">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-xl bg-accent-green/15 text-accent-green font-mono font-bold flex items-center justify-center text-sm">
-                        L{profile?.level || 1}
+                  <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-cyber-yellow text-black font-mono font-black flex items-center justify-center text-sm shadow-yellow-glow">
+                        L{xpLevel}
                       </div>
                       <div>
-                        <div className="text-xs font-semibold">Pilot Mission Progress</div>
-                        <div className="text-[11px] font-mono text-text-muted">
-                          {profile?.total_xp || 0} Total XP
+                        <div className="text-xs font-bold uppercase tracking-wider text-zinc-300">Pilot Cockpit</div>
+                        <div className="text-[11px] font-mono text-cyber-yellow font-semibold">
+                          {totalXp} Total XP
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 text-xs font-mono font-semibold text-accent-amber bg-accent-amber/10 px-2 py-0.5 rounded-full">
-                      <Flame size={12} className="fill-accent-amber" />
-                      <span>{profile?.streak_days || 1}d Streak</span>
+                    <div className="flex items-center gap-1 text-xs font-mono font-bold text-black bg-cyber-yellow px-2.5 py-1 rounded-full shadow-sm">
+                      <Flame size={12} className="fill-black" />
+                      <span>{streakDays}d Streak</span>
                     </div>
                   </div>
 
                   {/* Level Progress Bar */}
-                  <div className="py-3">
-                    <div className="flex justify-between text-[11px] text-text-muted mb-1">
-                      <span>Level {profile?.level || 1}</span>
-                      <span>Next Level ({profile?.next_level_xp || 100} XP)</span>
+                  <div className="py-4">
+                    <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1.5">
+                      <span>Level {xpLevel}</span>
+                      <span>Next Level ({nextLevelXp} XP)</span>
                     </div>
-                    <div className="w-full h-1.5 bg-fill rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-void-gray rounded-full overflow-hidden p-0.5 border border-white/5">
                       <div
-                        className="h-full bg-accent-green rounded-full transition-all duration-500"
-                        style={{ width: `${profile?.progress_percent || 25}%` }}
+                        className="h-full bg-cyber-yellow rounded-full transition-all duration-500 shadow-yellow-glow"
+                        style={{ width: `${progressPercent}%` }}
                       />
                     </div>
                   </div>
 
                   {/* Badges Preview */}
                   <div className="pt-2">
-                    <div className="text-[11px] font-medium text-text-muted mb-2 uppercase tracking-wider">
-                      Badges Unlocked ({profile?.badges.filter((b) => b.unlocked).length || 0}/6)
+                    <div className="text-[10px] font-bold text-zinc-400 mb-2 uppercase tracking-widest">
+                      Unlocked Badges ({badges.filter((b) => b.unlocked).length}/{badges.length || 1})
                     </div>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {profile?.badges.slice(0, 4).map((badge) => (
+                    <div className="grid grid-cols-2 gap-2">
+                      {badges.slice(0, 4).map((badge) => (
                         <BadgeItem
                           key={badge.id}
                           id={badge.id}
@@ -320,24 +342,26 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
                   </div>
 
                   {/* League Mini Leaderboard */}
-                  <div className="pt-3 mt-3 border-t border-border">
-                    <div className="text-[11px] font-medium text-text-muted mb-2 uppercase tracking-wider flex items-center justify-between">
-                      <span>Bronze League</span>
-                      <Users size={12} />
+                  <div className="pt-4 mt-4 border-t border-white/10">
+                    <div className="text-[10px] font-bold text-zinc-400 mb-2.5 uppercase tracking-widest flex items-center justify-between">
+                      <span>Live League Standings</span>
+                      <Users size={12} className="text-cyber-yellow" />
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1.5">
                       {leaguePlayers.map((player) => (
                         <div
                           key={player.rank}
-                          className={`flex items-center justify-between text-xs px-2 py-1 rounded-lg ${
-                            player.active ? "bg-accent-green/10 text-accent-green font-medium" : "text-text-muted"
+                          className={`flex items-center justify-between text-xs px-3 py-1.5 rounded-full ${
+                            player.active
+                              ? "bg-cyber-yellow/20 text-cyber-yellow border border-cyber-yellow/40 font-bold"
+                              : "text-zinc-400 bg-white/5"
                           }`}
                         >
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-[11px] opacity-60">#{player.rank}</span>
+                            <span className="font-mono text-[10px] opacity-60">#{player.rank}</span>
                             <span>{player.name}</span>
                           </div>
-                          <span className="font-mono text-[11px]">{player.xp} XP</span>
+                          <span className="font-mono text-[10px]">{player.xp} XP</span>
                         </div>
                       ))}
                     </div>
@@ -352,7 +376,7 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
             <button
               type="button"
               onClick={() => setShowMoreMenu(!showMoreMenu)}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-fill transition-colors border border-border/60 focus-visible:outline-none"
+              className="w-9 h-9 rounded-full flex items-center justify-center text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 transition-all border border-white/15 focus-visible:outline-none active:scale-95"
               aria-label="More options"
             >
               <MoreHorizontal size={16} />
@@ -361,15 +385,15 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
             <AnimatePresence>
               {showMoreMenu && (
                 <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 10, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-56 p-2 rounded-2xl bg-surface border border-border shadow-popover z-50 text-xs text-text-primary"
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute right-0 mt-3 w-60 p-3 rounded-[32px] bg-void-charcoal/95 border border-white/20 shadow-2xl backdrop-blur-2xl z-50 text-xs text-white"
                 >
                   {/* Mode Switch: Participant / Organizer */}
                   <div className="p-1 mb-2">
-                    <div className="text-[10px] uppercase font-semibold text-text-muted tracking-wider mb-1.5 px-1">
+                    <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest mb-2 px-1">
                       View Mode
                     </div>
                     <SegmentedControl
@@ -384,7 +408,58 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
                     />
                   </div>
 
-                  <div className="h-px bg-border my-1" />
+                  <div className="h-px bg-white/10 my-2" />
+
+                  {auth.profile ? (
+                    <>
+                      <Link
+                        href={`/u?username=${encodeURIComponent(auth.profile.username)}`}
+                        onClick={() => setShowMoreMenu(false)}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-full hover:bg-white/10 text-zinc-300 hover:text-white transition-colors"
+                      >
+                        <Users size={14} />
+                        <span>Profile</span>
+                      </Link>
+                      <Link
+                        href="/profile/edit"
+                        onClick={() => setShowMoreMenu(false)}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-full hover:bg-white/10 text-zinc-300 hover:text-white transition-colors"
+                      >
+                        <Compass size={14} />
+                        <span>Edit Profile</span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          auth.signOut();
+                          setShowMoreMenu(false);
+                          router.push("/");
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-full hover:bg-white/10 text-zinc-400 hover:text-rose-400 transition-colors text-left"
+                      >
+                        <span>Logout</span>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        onClick={() => setShowMoreMenu(false)}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-full hover:bg-white/10 text-zinc-300 hover:text-white transition-colors"
+                      >
+                        <span>Login</span>
+                      </Link>
+                      <Link
+                        href="/signup"
+                        onClick={() => setShowMoreMenu(false)}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-full bg-cyber-yellow text-black hover:bg-cyber-yellow-hover font-bold transition-all mt-1 justify-center active:scale-95"
+                      >
+                        <span>Sign Up Free</span>
+                      </Link>
+                    </>
+                  )}
+
+                  <div className="h-px bg-white/10 my-2" />
 
                   {/* Jury Mode Trigger */}
                   <button
@@ -393,7 +468,7 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
                       setShowMoreMenu(false);
                       if (onOpenJuryMode) onOpenJuryMode();
                     }}
-                    className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-accent-blue hover:bg-accent-blue/10 transition-colors text-left font-medium"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-full text-cyber-yellow hover:bg-cyber-yellow/10 transition-colors text-left font-semibold"
                   >
                     <Compass size={14} />
                     <span>Jury Mode (60s Tour)</span>
@@ -403,26 +478,26 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
                   <button
                     type="button"
                     onClick={toggleTheme}
-                    className="w-full flex items-center justify-between px-2.5 py-2 rounded-lg hover:bg-fill transition-colors text-left"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-full hover:bg-white/10 text-zinc-300 hover:text-white transition-colors text-left"
                   >
                     <div className="flex items-center gap-2.5">
                       {theme === "dark" ? <Moon size={14} /> : <Sun size={14} />}
                       <span>Appearance</span>
                     </div>
-                    <span className="text-[11px] text-text-muted capitalize">{theme}</span>
+                    <span className="text-[10px] font-mono uppercase text-zinc-400">{theme}</span>
                   </button>
 
                   {/* Sound FX Toggle */}
                   <button
                     type="button"
                     onClick={toggleSound}
-                    className="w-full flex items-center justify-between px-2.5 py-2 rounded-lg hover:bg-fill transition-colors text-left"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-full hover:bg-white/10 text-zinc-300 hover:text-white transition-colors text-left"
                   >
                     <div className="flex items-center gap-2.5">
                       {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
-                      <span>Sound Effects</span>
+                      <span>Sound FX</span>
                     </div>
-                    <span className="text-[11px] text-text-muted">
+                    <span className="text-[10px] font-mono uppercase text-cyber-yellow">
                       {soundEnabled ? "On" : "Off"}
                     </span>
                   </button>

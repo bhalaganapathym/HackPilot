@@ -7,6 +7,7 @@ import { HeaderHUD } from "@/components/layout/HeaderHUD";
 import { Footer } from "@/components/layout/Footer";
 import { CommandPalette } from "@/components/common/CommandPalette";
 import { JuryTourModal } from "@/components/common/JuryTourModal";
+import { AuthProvider } from "@/lib/auth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -69,28 +70,30 @@ export default function RootLayout({
         />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className="flex flex-col min-h-screen bg-bg text-text-primary antialiased selection:bg-accent-blue/20 selection:text-accent-blue">
-        <HeaderHUD
-          onOpenJuryMode={() => setIsJuryTourOpen(true)}
-          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-        />
-        
-        <main className="flex-1 w-full max-w-[1120px] mx-auto px-4 py-8">
-          {children}
-        </main>
+      <body className="flex flex-col min-h-screen bg-[#0A0A0A] text-white antialiased selection:bg-cyber-yellow selection:text-black">
+        <AuthProvider>
+          <HeaderHUD
+            onOpenJuryMode={() => setIsJuryTourOpen(true)}
+            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          />
+          
+          <main className="flex-1 w-full flex flex-col">
+            {children}
+          </main>
 
-        <Footer />
+          <Footer />
 
-        <CommandPalette
-          isOpen={isCommandPaletteOpen}
-          onClose={() => setIsCommandPaletteOpen(false)}
-          onLaunchJuryMode={() => setIsJuryTourOpen(true)}
-        />
+          <CommandPalette
+            isOpen={isCommandPaletteOpen}
+            onClose={() => setIsCommandPaletteOpen(false)}
+            onLaunchJuryMode={() => setIsJuryTourOpen(true)}
+          />
 
-        <JuryTourModal
-          isOpen={isJuryTourOpen}
-          onClose={() => setIsJuryTourOpen(false)}
-        />
+          <JuryTourModal
+            isOpen={isJuryTourOpen}
+            onClose={() => setIsJuryTourOpen(false)}
+          />
+        </AuthProvider>
       </body>
     </html>
   );

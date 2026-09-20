@@ -2,6 +2,18 @@
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+
+function authHeaders(accessToken?: string | null): HeadersInit {
+  return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+}
+
+export function resolveMediaUrl(path?: string | null): string | null {
+  if (!path) return null;
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  return `${API_ORIGIN}${path}`;
+}
+
 export interface ApiError {
   code: string;
   message: string;
@@ -127,6 +139,75 @@ export interface GamificationResult {
   level_up: boolean;
   new_level?: number;
   badges_unlocked: Badge[];
+}
+
+export interface SocialSummary {
+  followers_count: number;
+  following_count: number;
+  relationship: "none" | "follow" | "following" | "friends";
+}
+
+export interface ProfileGamification {
+  total_xp: number;
+  level: number;
+  current_level_xp: number;
+  next_level_xp: number;
+  progress_percent: number;
+  current_streak: number;
+  longest_streak?: number | null;
+  quests_completed: number;
+  badges: Badge[];
+  achievements: Badge[];
+}
+
+export interface PublicProfileResponse {
+  id: string;
+  supabase_user_id: string;
+  email?: string | null;
+  name: string;
+  username: string;
+  bio: string;
+  linkedin_url?: string | null;
+  github_url?: string | null;
+  avatar_url?: string | null;
+  profile_url: string;
+  created_at: string;
+  updated_at: string;
+  social: SocialSummary;
+  gamification: ProfileGamification;
+  is_current_user: boolean;
+}
+
+export interface ProfileUpdatePayload {
+  name: string;
+  username: string;
+  bio: string;
+  linkedin_url?: string | null;
+  github_url?: string | null;
+}
+
+export interface LeaderboardEntry {
+  rank: number;
+  user: {
+    id: string;
+    supabase_user_id: string;
+    name: string;
+    username: string;
+    bio: string;
+    linkedin_url?: string | null;
+    github_url?: string | null;
+    avatar_url?: string | null;
+  };
+  total_xp: number;
+  level: number;
+  streak_days: number;
+  relationship: SocialSummary["relationship"];
+  is_current_user: boolean;
+}
+
+export interface LeaderboardResponse {
+  scope: "global" | "friends";
+  entries: LeaderboardEntry[];
 }
 
 export interface Submission {
@@ -274,6 +355,72 @@ export const api = {
   async getHealth(): Promise<HealthResponse> {
     const res = await fetch(`${API_BASE_URL}/health`);
     return handleResponse<HealthResponse>(res);
+  },
+
+  async getMe(accessToken: string): Promise<PublicProfileResponse> {
+    const res = await fetch(`${API_BASE_URL}/me`, {
+      headers: authHeaders(accessToken),
+    });
+    return handleResponse(res);
+  },
+
+  async updateMe(accessToken: string, payload: ProfileUpdatePayload): Promise<PublicProfileResponse> {
+    const res = await fetch(`${API_BASE_URL}/me/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeaders(accessToken),
+      },
+      body: JSON.stringify(payload),
+    });
+    return handleResponse(res);
+  },
+
+  async uploadAvatar(accessToken: string, formData: FormData): Promise<PublicProfileResponse> {
+    const res = await fetch(`${API_BASE_URL}/me/avatar`, {
+      method: "POST",
+      headers: authHeaders(accessToken),
+      body: formData,
+    });
+    return handleResponse(res);
+  },
+
+  async removeAvatar(accessToken: string): Promise<PublicProfileResponse> {
+    const res = await fetch(`${API_BASE_URL}/me/avatar`, {
+      method: "DELETE",
+      headers: authHeaders(accessToken),
+    });
+    return handleResponse(res);
+  },
+
+  async getPublicProfile(username: string, accessToken?: string | null): Promise<PublicProfileResponse> {
+    const res = await fetch(`${API_BASE_URL}/u/${encodeURIComponent(username)}`, {
+      headers: authHeaders(accessToken),
+    });
+    return handleResponse(res);
+  },
+
+  async followUser(username: string, accessToken: string): Promise<SocialSummary> {
+    const res = await fetch(`${API_BASE_URL}/u/${encodeURIComponent(username)}/follow`, {
+      method: "POST",
+      headers: authHeaders(accessToken),
+    });
+    return handleResponse(res);
+  },
+
+  async unfollowUser(username: string, accessToken: string): Promise<SocialSummary> {
+    const res = await fetch(`${API_BASE_URL}/u/${encodeURIComponent(username)}/follow`, {
+      method: "DELETE",
+      headers: authHeaders(accessToken),
+    });
+    return handleResponse(res);
+  },
+
+  async getLeaderboard(scope: "global" | "friends", accessToken?: string | null): Promise<LeaderboardResponse> {
+    const res = await fetch(`${API_BASE_URL}/leaderboard?scope=${scope}`, {
+      headers: authHeaders(accessToken),
+    });
+    return handleResponse(res);
   },
 
   async analyzeAbstract(payload: {

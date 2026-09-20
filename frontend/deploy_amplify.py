@@ -44,6 +44,23 @@ def get_session():
     return boto3.Session(profile_name=PROFILE, region_name=REGION)
 
 
+def read_env_value(name: str, *files: str) -> str | None:
+    if os.environ.get(name):
+        return os.environ[name]
+    for file_name in files:
+        path = pathlib.Path(file_name)
+        if not path.exists():
+            continue
+        for raw_line in path.read_text(encoding="utf-8").splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            if key.strip() == name:
+                return value.strip().strip('"').strip("'")
+    return None
+
+
 # ─── Step 1: Read Lambda URL ──────────────────────────────────────────────────
 def get_lambda_url(cli_url: str | None) -> str:
     if cli_url:
@@ -66,6 +83,18 @@ def build_frontend(lambda_url: str):
     log(f"Building with NEXT_PUBLIC_API_URL={api_url}")
 
     env = {**os.environ, "NEXT_PUBLIC_API_URL": api_url}
+    supabase_url = read_env_value("NEXT_PUBLIC_SUPABASE_URL", ".env.local", ".env.production")
+    supabase_key = read_env_value("NEXT_PUBLIC_SUPABASE_ANON_KEY", ".env.local", ".env.production")
+    if not supabase_url:
+        supabase_url = read_env_value("SUPABASE_URL", "../backend/.env.production", "../backend/.env", "../backend/.env.ec2")
+    if not supabase_key:
+        supabase_key = read_env_value("SUPABASE_ANON_KEY", "../backend/.env.production", "../backend/.env", "../backend/.env.ec2")
+    if supabase_url and supabase_key:
+        env["NEXT_PUBLIC_SUPABASE_URL"] = supabase_url
+        env["NEXT_PUBLIC_SUPABASE_ANON_KEY"] = supabase_key
+        log("Building with Supabase public auth config.")
+    else:
+        log("WARNING: Supabase public auth config not found; deployed auth UI will show setup-required state.")
 
     result = subprocess.run(
         ["npm", "run", "build"],
@@ -117,6 +146,25 @@ def ensure_amplify_app(amplify, lambda_url: str) -> str:
         if app["name"] == APP_NAME:
             app_id = app["appId"]
             log(f"Amplify app exists: {app_id}")
+            amplify.update_app(
+                appId=app_id,
+                environmentVariables={
+                    "NEXT_PUBLIC_API_URL": lambda_url.rstrip("/") + "/api",
+                    **({
+                        "NEXT_PUBLIC_SUPABASE_URL": read_env_value("NEXT_PUBLIC_SUPABASE_URL", ".env.local", ".env.production")
+                            or read_env_value("SUPABASE_URL", "../backend/.env.production", "../backend/.env", "../backend/.env.ec2"),
+                        "NEXT_PUBLIC_SUPABASE_ANON_KEY": read_env_value("NEXT_PUBLIC_SUPABASE_ANON_KEY", ".env.local", ".env.production")
+                            or read_env_value("SUPABASE_ANON_KEY", "../backend/.env.production", "../backend/.env", "../backend/.env.ec2"),
+                    } if (
+                        read_env_value("NEXT_PUBLIC_SUPABASE_URL", ".env.local", ".env.production")
+                        or read_env_value("SUPABASE_URL", "../backend/.env.production", "../backend/.env", "../backend/.env.ec2")
+                    ) and (
+                        read_env_value("NEXT_PUBLIC_SUPABASE_ANON_KEY", ".env.local", ".env.production")
+                        or read_env_value("SUPABASE_ANON_KEY", "../backend/.env.production", "../backend/.env", "../backend/.env.ec2")
+                    ) else {}),
+                },
+                customRules=[],
+            )
             return app_id
 
     log(f"Creating Amplify app: {APP_NAME}")
@@ -124,17 +172,8 @@ def ensure_amplify_app(amplify, lambda_url: str) -> str:
         name=APP_NAME,
         description="HackPilot — AI-powered hackathon co-pilot",
         platform="WEB",
-        environmentVariables={
-            "NEXT_PUBLIC_API_URL": lambda_url.rstrip("/") + "/api",
-        },
-        customRules=[
-            # SPA fallback — redirect missing paths to index.html
-            {
-                "source": "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json)$)([^.]+$)/>",
-                "target": "/index.html",
-                "status": "200",
-            }
-        ],
+        environmentVariables={"NEXT_PUBLIC_API_URL": lambda_url.rstrip("/") + "/api"},
+        customRules=[],
     )
     app_id = resp["app"]["appId"]
     log(f"Amplify app created: {app_id}")

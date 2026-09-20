@@ -143,29 +143,29 @@ export default function AbstractAnalyzerPage() {
   };
 
   return (
-    <div ref={containerRef} className="space-y-10 pb-16">
+    <div ref={containerRef} className="max-w-[1200px] w-full mx-auto px-4 sm:px-8 py-8 space-y-10">
       {/* Top Banner / Theme Header */}
-      <div className="gsap-fade-in">
-        <div className="flex items-center gap-2 text-xs font-mono font-semibold text-accent-blue uppercase tracking-wider mb-1">
+      <div className="gsap-fade-in space-y-2">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono font-bold text-cyber-yellow uppercase tracking-widest">
           <FileText size={14} />
-          <span>Abstract Analyzer</span>
+          <span>Abstract Diagnostic Engine</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-text-primary mb-2">
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight">
           Turn abstract weaknesses into quests.
         </h1>
-        <p className="text-sm sm:text-base text-text-muted max-w-xl">
-          Judges have 3 minutes. Test your abstract against real scoring heuristics, complete weakness quests to earn XP, and track your score delta.
+        <p className="text-sm sm:text-base text-zinc-400 max-w-2xl leading-relaxed">
+          Judges spend 3 minutes reviewing. Test your abstract against high-impact heuristics, complete fixable quests to earn XP, and watch your score delta jump.
         </p>
       </div>
 
       {/* Editor & Step 1 */}
-      <div className="gsap-fade-in rounded-3xl bg-surface border border-border p-6 shadow-card space-y-4">
+      <div className="gsap-fade-in rounded-[32px] bg-void-charcoal/80 border border-white/10 p-7 sm:p-8 shadow-2xl backdrop-blur-xl space-y-5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+          <label className="text-xs font-bold uppercase tracking-widest text-zinc-400">
             Project Abstract
           </label>
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-text-tertiary">
+            <span className="text-xs font-mono text-zinc-500">
               {wordCount} words
             </span>
             <button
@@ -174,9 +174,9 @@ export default function AbstractAnalyzerPage() {
                 setAbstractText(DEMO_ABSTRACT_INITIAL);
                 setErrorMessage(null);
               }}
-              className="text-xs font-medium text-accent-blue hover:underline focus-visible:outline-none"
+              className="text-xs font-bold text-cyber-yellow hover:underline focus-visible:outline-none"
             >
-              Load sample
+              Load Sample Data
             </button>
           </div>
         </div>
@@ -186,41 +186,43 @@ export default function AbstractAnalyzerPage() {
           value={abstractText}
           onChange={(e) => setAbstractText(e.target.value)}
           placeholder="Paste your project abstract here... (e.g. problem statement, architecture, target users, and impact)"
-          className="w-full p-4 rounded-2xl bg-fill/50 border border-border/70 text-text-primary placeholder:text-text-tertiary text-sm leading-relaxed focus:bg-surface focus:outline-none focus:border-accent-blue transition-all resize-y"
+          className="w-full p-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-zinc-500 text-sm leading-relaxed focus:bg-white/10 focus:outline-none focus:border-cyber-yellow transition-all resize-y"
         />
 
         {errorMessage && (
-          <div className="flex items-center gap-2 text-xs text-accent-coral bg-accent-coral/10 p-3 rounded-xl border border-accent-coral/20">
+          <div className="flex items-center gap-2 text-xs text-rose-400 bg-rose-500/10 p-3 rounded-2xl border border-rose-500/20">
             <AlertCircle size={14} />
             <span>{errorMessage}</span>
           </div>
         )}
 
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
           {/* Primary Action Button */}
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => handleAnalyze()}
             disabled={loading}
-            className="h-11 px-6 rounded-2xl bg-accent-blue text-white font-medium text-sm shadow-sm hover:bg-accent-blue/90 disabled:opacity-50 transition-all flex items-center gap-2 focus-visible:outline-none"
+            className="h-12 px-8 rounded-full bg-cyber-yellow text-black font-extrabold text-sm shadow-yellow-glow hover:bg-cyber-yellow-hover disabled:opacity-50 transition-all flex items-center gap-2 focus-visible:outline-none"
           >
-            <span>{loading ? "Analyzing..." : "Analyze Abstract"}</span>
-            <ArrowRight size={15} />
+            <span>{loading ? "Analyzing Pipeline..." : "Analyze Abstract"}</span>
+            <ArrowRight size={16} />
           </motion.button>
 
-          {/* Secondary Action: Before/After Demo Button (Revealed after first analysis or sample loaded) */}
+          {/* Secondary Action: Before/After Demo Button */}
           {(analysis || abstractText) && (
             <motion.button
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleImproveDemo}
               disabled={loading}
-              className="h-11 px-5 rounded-2xl bg-fill hover:bg-fill-hover text-text-primary font-medium text-sm transition-colors border border-border/60 flex items-center gap-2 focus-visible:outline-none"
+              className="h-12 px-6 rounded-full bg-white/5 hover:bg-white/10 text-white font-bold text-sm transition-all border border-white/15 flex items-center gap-2 focus-visible:outline-none active:scale-95"
               title="One-click demo: loads an improved abstract with metrics and demonstrates score jump ~48 to ~86"
             >
-              <RotateCcw size={14} className="text-accent-blue" />
-              <span>Improve with suggested fixes (Demo)</span>
+              <RotateCcw size={15} className="text-cyber-yellow" />
+              <span>Improve with Suggested Fixes (Demo)</span>
             </motion.button>
           )}
         </div>
@@ -243,18 +245,18 @@ export default function AbstractAnalyzerPage() {
             className="space-y-8"
           >
             {/* Essential Card: Score Dial + One-Sentence Verdict */}
-            <div className="rounded-3xl bg-surface border border-border p-6 shadow-card flex flex-col md:flex-row items-center justify-between gap-8">
-              <div className="flex flex-col items-center md:items-start text-center md:text-left gap-2 max-w-lg">
+            <div className="rounded-[32px] bg-void-charcoal/85 border border-white/10 p-7 sm:p-8 shadow-2xl backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="flex flex-col items-center md:items-start text-center md:text-left gap-3 max-w-lg">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono uppercase tracking-wider text-text-tertiary">
+                  <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-bold">
                     Jury Verdict
                   </span>
                   {analysis.score_delta !== null && analysis.score_delta !== undefined && (
                     <span
-                      className={`text-xs font-mono font-semibold px-2 py-0.5 rounded-full border ${
+                      className={`text-xs font-mono font-bold px-3 py-0.5 rounded-full border ${
                         analysis.score_delta >= 0
-                          ? "bg-accent-green/10 text-accent-green border-accent-green/30"
-                          : "bg-accent-coral/10 text-accent-coral border-accent-coral/30"
+                          ? "bg-cyber-yellow text-black border-cyber-yellow"
+                          : "bg-rose-500/10 text-rose-400 border-rose-500/30"
                       }`}
                     >
                       {analysis.score_delta > 0 ? `+${analysis.score_delta} pts delta` : `${analysis.score_delta} pts`}
@@ -262,11 +264,11 @@ export default function AbstractAnalyzerPage() {
                   )}
                 </div>
 
-                <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-text-primary">
+                <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
                   {analysis.one_sentence_verdict}
                 </h2>
 
-                <p className="text-xs text-text-muted">
+                <p className="text-xs text-zinc-400">
                   {analysis.strengths[0] || "Clear problem context identified."}
                 </p>
               </div>
@@ -277,63 +279,63 @@ export default function AbstractAnalyzerPage() {
                   score={analysis.overall_score}
                   delta={analysis.score_delta}
                   showVerdict
-                  size={144}
+                  size={152}
                 />
               </div>
             </div>
 
             {/* Submit to Organizer Panel */}
-            <div className="rounded-2xl border border-accent-violet/30 bg-surface p-5 space-y-4">
-              <div className="flex items-center gap-2 text-sm font-semibold text-text-primary">
-                <Send size={14} className="text-accent-violet" />
-                <span>Submit Project to Organizer</span>
+            <div className="rounded-[32px] border border-white/15 bg-void-charcoal/80 p-6 sm:p-8 shadow-2xl space-y-4">
+              <div className="flex items-center gap-2 text-sm font-bold text-white">
+                <Send size={15} className="text-cyber-yellow" />
+                <span>Submit Project to Organizer Dashboard</span>
               </div>
 
               {submittedId ? (
-                <div className="flex items-center gap-2 text-sm text-accent-green font-medium p-3 bg-accent-green/10 rounded-xl border border-accent-green/20">
-                  <Layers size={14} />
-                  <span>Submitted! ID: <span className="font-mono text-xs">{submittedId.slice(0, 8)}…</span> — visible in organizer dashboard.</span>
+                <div className="flex items-center gap-2 text-sm text-cyber-yellow font-bold p-4 bg-cyber-yellow/10 rounded-2xl border border-cyber-yellow/20">
+                  <Layers size={16} />
+                  <span>Submitted! ID: <span className="font-mono text-xs text-white">{submittedId.slice(0, 8)}…</span> — visible in organizer console.</span>
                 </div>
               ) : (
-                <div className="space-y-3">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs text-text-muted font-medium block mb-1">Project Title</label>
+                      <label className="text-xs text-zinc-400 font-bold block mb-1.5 uppercase tracking-wider">Project Title</label>
                       <input
                         type="text"
                         value={projectTitle}
                         onChange={e => setProjectTitle(e.target.value)}
                         placeholder="My Hackathon Project"
-                        className="w-full px-3 py-2 rounded-xl bg-fill border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-violet/50"
+                        className="w-full px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-cyber-yellow"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-text-muted font-medium block mb-1">Team Name</label>
+                      <label className="text-xs text-zinc-400 font-bold block mb-1.5 uppercase tracking-wider">Team Name</label>
                       <input
                         type="text"
                         value={teamName}
                         onChange={e => setTeamName(e.target.value)}
                         placeholder="Team HackPilot"
-                        className="w-full px-3 py-2 rounded-xl bg-fill border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-violet/50"
+                        className="w-full px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-cyber-yellow"
                       />
                     </div>
                   </div>
                   <button
                     onClick={handleSubmitProject}
                     disabled={submitting || !abstractText.trim()}
-                    className="w-full py-2.5 rounded-xl bg-accent-violet text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-accent-violet/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-3 rounded-full bg-cyber-yellow text-black font-extrabold text-sm flex items-center justify-center gap-2 hover:bg-cyber-yellow-hover shadow-yellow-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
                   >
                     {submitting ? (
                       <span className="flex items-center gap-2">
-                        <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                         Submitting…
                       </span>
                     ) : (
-                      <><Send size={13} /> Submit Abstract to Organizer</>
+                      <><Send size={14} /> Submit Abstract to Organizer</>
                     )}
                   </button>
-                  <p className="text-[11px] text-text-muted text-center">
-                    Creates a live entry in the organizer dashboard, synced to AWS DynamoDB.
+                  <p className="text-[11px] text-zinc-400 text-center font-mono">
+                    Creates an authoritative entry in the organizer dashboard, synced to AWS DynamoDB.
                   </p>
                 </div>
               )}
@@ -343,53 +345,53 @@ export default function AbstractAnalyzerPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-semibold text-text-primary">
+                  <h3 className="text-lg font-black text-white tracking-tight">
                     Top Action Quests
                   </h3>
-                  <p className="text-xs text-text-muted">
+                  <p className="text-xs text-zinc-400">
                     Resolve these specific weaknesses to earn XP and maximize jury rating.
                   </p>
                 </div>
-                <span className="text-xs font-mono text-text-tertiary">
+                <span className="text-xs font-mono text-zinc-400 font-bold">
                   {analysis.weaknesses.length} Quests Identified
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {analysis.weaknesses.slice(0, 3).map((quest) => {
                   const isDone = completedQuests.has(quest.id);
                   return (
                     <div
                       key={quest.id}
-                      className={`rounded-2xl p-5 border transition-all flex flex-col justify-between gap-4 ${
+                      className={`rounded-[32px] p-6 border transition-all flex flex-col justify-between gap-5 ${
                         isDone
-                          ? "bg-accent-green/5 border-accent-green/30 opacity-80"
-                          : "bg-surface border-border hover:border-accent-blue/40 shadow-sm"
+                          ? "bg-cyber-yellow/5 border-cyber-yellow/30 opacity-85"
+                          : "bg-void-charcoal/80 border-white/10 hover:border-cyber-yellow/50 shadow-xl"
                       }`}
                     >
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-mono font-semibold text-accent-green flex items-center gap-1">
-                            <Sparkles size={11} />
+                          <span className="text-xs font-mono font-bold text-cyber-yellow flex items-center gap-1">
+                            <Sparkles size={12} className="fill-cyber-yellow" />
                             +{quest.xp_reward} XP
                           </span>
                           {isDone && (
-                            <span className="flex items-center gap-1 text-[11px] font-medium text-accent-green">
-                              <Check size={12} /> Fixed
+                            <span className="flex items-center gap-1 text-xs font-bold text-cyber-yellow">
+                              <Check size={13} /> Fixed
                             </span>
                           )}
                         </div>
 
-                        <h4 className="text-sm font-semibold text-text-primary leading-snug">
+                        <h4 className="text-base font-bold text-white leading-snug">
                           {quest.title}
                         </h4>
 
-                        <p className="text-xs text-text-muted leading-relaxed">
+                        <p className="text-xs text-zinc-400 leading-relaxed">
                           {quest.why_it_matters}
                         </p>
 
-                        <div className="p-2.5 rounded-xl bg-fill/60 border border-border/40 text-[11px] text-text-primary font-mono leading-relaxed">
-                          <span className="text-text-tertiary">Fix: </span>
+                        <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-zinc-300 font-mono leading-relaxed">
+                          <span className="text-cyber-yellow font-bold">Fix: </span>
                           {quest.suggested_fix}
                         </div>
                       </div>
@@ -398,14 +400,14 @@ export default function AbstractAnalyzerPage() {
                         <button
                           type="button"
                           onClick={() => handleCompleteQuest(quest.id, quest.xp_reward)}
-                          className="w-full py-2 rounded-xl bg-accent-green/10 text-accent-green border border-accent-green/20 hover:bg-accent-green/20 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 focus-visible:outline-none"
+                          className="w-full py-2.5 rounded-full bg-cyber-yellow text-black hover:bg-cyber-yellow-hover font-bold text-xs transition-all flex items-center justify-center gap-2 active:scale-95 shadow-md"
                         >
-                          <CheckCircle2 size={13} />
+                          <CheckCircle2 size={14} />
                           <span>Mark Fixed (+{quest.xp_reward} XP)</span>
                         </button>
                       ) : (
-                        <div className="w-full py-1.5 text-center text-xs font-medium text-accent-green bg-accent-green/10 rounded-xl">
-                          Resolved
+                        <div className="w-full py-2 text-center text-xs font-bold text-cyber-yellow bg-cyber-yellow/10 rounded-full border border-cyber-yellow/20">
+                          Quest Resolved
                         </div>
                       )}
                     </div>
@@ -420,14 +422,14 @@ export default function AbstractAnalyzerPage() {
               <Expander title="All 5 Evaluation Metrics (Rubric Breakdown)" badge="5 Dimensions">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 pt-2">
                   {Object.entries(analysis.scores).map(([key, item]) => (
-                    <div key={key} className="p-3 rounded-xl bg-fill border border-border/50">
-                      <div className="text-[11px] font-medium text-text-muted uppercase tracking-wider capitalize">
+                    <div key={key} className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                      <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest capitalize">
                         {key.replace("_", " ")}
                       </div>
-                      <div className="text-xl font-mono font-bold text-text-primary my-1">
-                        {item.score}<span className="text-xs text-text-muted font-normal">/10</span>
+                      <div className="text-2xl font-mono font-black text-cyber-yellow my-1">
+                        {item.score}<span className="text-xs text-zinc-500 font-normal">/10</span>
                       </div>
-                      <div className="text-[11px] text-text-muted truncate">
+                      <div className="text-xs text-zinc-400 truncate">
                         {item.verdict}
                       </div>
                     </div>
@@ -440,10 +442,10 @@ export default function AbstractAnalyzerPage() {
                 <div className="space-y-2 pt-2 text-xs">
                   {Object.entries(analysis.scores).map(([key, item]) => (
                     <div key={key} className="space-y-1">
-                      <span className="font-semibold text-text-primary capitalize">
+                      <span className="font-bold text-white capitalize">
                         {key.replace("_", " ")}:
                       </span>
-                      <ul className="list-disc list-inside text-text-muted font-mono space-y-0.5 ml-1">
+                      <ul className="list-disc list-inside text-zinc-400 font-mono space-y-0.5 ml-1">
                         {item.evidence.map((ev, i) => (
                           <li key={i}>{ev}</li>
                         ))}
@@ -458,10 +460,10 @@ export default function AbstractAnalyzerPage() {
                 <Expander title="Revision Attempt History" badge={`${history.length} attempts`}>
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="space-y-1">
-                      <div className="text-xs font-semibold text-text-primary">
+                      <div className="text-xs font-bold text-white">
                         Score Progression
                       </div>
-                      <div className="text-xs text-text-muted">
+                      <div className="text-xs text-zinc-400 font-mono">
                         Initial: {history[0].score}/100 → Latest: {analysis.overall_score}/100
                       </div>
                     </div>
@@ -469,7 +471,7 @@ export default function AbstractAnalyzerPage() {
                       data={history.map((h) => h.score)}
                       width={220}
                       height={40}
-                      color="var(--accent-blue)"
+                      color="#FDE047"
                     />
                   </div>
                 </Expander>

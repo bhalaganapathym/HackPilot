@@ -40,6 +40,22 @@ def log(msg):
 def get_session():
     return boto3.Session(profile_name=PROFILE, region_name=REGION)
 
+def read_env_value(name: str, *files: str) -> str | None:
+    if os.environ.get(name):
+        return os.environ[name]
+    for file_name in files:
+        path = pathlib.Path(file_name)
+        if not path.exists():
+            continue
+        for raw_line in path.read_text(encoding="utf-8").splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            if key.strip() == name:
+                return value.strip().strip('"').strip("'")
+    return None
+
 # ─── 1. Package Source ────────────────────────────────────────────────────────
 def package_backend():
     zip_path = pathlib.Path("hackpilot-backend-src.zip")
@@ -48,7 +64,7 @@ def package_backend():
         zip_path.unlink()
 
     # Prod .env content (without AWS_PROFILE so IAM role is used)
-    prod_env = """PROJECT_NAME="HackPilot"
+    base_prod_env = """PROJECT_NAME="HackPilot"
 API_V1_STR="/api"
 AI_PROVIDER="bedrock"
 DATABASE_URL="sqlite:///./hackpilot.db"
@@ -61,6 +77,12 @@ BEDROCK_TIMEOUT_SECONDS=60
 S3_BUCKET_NAME="hackpilot-dev-artifacts-318273660064"
 DYNAMODB_TABLE_NAME="hackpilot-dev-submissions"
 """
+    prod_env_lines = [base_prod_env.rstrip()]
+    for key in ("SUPABASE_URL", "SUPABASE_ANON_KEY"):
+        value = read_env_value(key, ".env.production", ".env", ".env.ec2")
+        if value:
+            prod_env_lines.append(f'{key}="{value}"')
+    prod_env = "\n".join(prod_env_lines) + "\n"
     with open(".env.ec2", "w") as f:
         f.write(prod_env)
 
@@ -73,9 +95,8 @@ DYNAMODB_TABLE_NAME="hackpilot-dev-submissions"
         zf.write("requirements.txt", "requirements.txt")
         # Add .env
         zf.write(".env.ec2", ".env")
-        # Add existing database with seed data if exists
-        if pathlib.Path("hackpilot.db").exists():
-            zf.write("hackpilot.db", "hackpilot.db")
+        # Do not package local SQLite data. The EC2 instance owns the live DB,
+        # and uploading local test/dev rows would leak into production.
 
     size_kb = zip_path.stat().st_size / 1024
     log(f"Backend package ready: {size_kb:.1f} KB")
@@ -180,6 +201,40 @@ def launch_backend_ec2(session):
     log(f"Instance running! Public IP: {public_ip}")
     return inst_id, public_ip
 
+def update_existing_backend_ec2(session, inst_id: str):
+    ssm = session.client("ssm", region_name=REGION)
+    log(f"Updating existing EC2 instance in-place via SSM: {inst_id}")
+    commands = [
+        "set -e",
+        "cd /opt/hackpilot",
+        f"aws s3 cp s3://{S3_BUCKET}/{S3_KEY} backend-src.zip --region {REGION}",
+        "unzip -o backend-src.zip",
+        "source venv/bin/activate",
+        "pip install -r requirements.txt",
+        "systemctl restart hackpilot",
+        "systemctl status hackpilot --no-pager",
+    ]
+    response = ssm.send_command(
+        InstanceIds=[inst_id],
+        DocumentName="AWS-RunShellScript",
+        Parameters={"commands": commands},
+        TimeoutSeconds=300,
+    )
+    command_id = response["Command"]["CommandId"]
+    for attempt in range(60):
+        time.sleep(5)
+        result = ssm.get_command_invocation(CommandId=command_id, InstanceId=inst_id)
+        status = result["Status"]
+        log(f"  SSM update status [{attempt + 1}/60]: {status}")
+        if status == "Success":
+            log("EC2 backend updated and service restarted.")
+            return
+        if status in ("Cancelled", "Failed", "TimedOut", "Cancelling"):
+            print(result.get("StandardOutputContent", ""))
+            print(result.get("StandardErrorContent", ""))
+            raise RuntimeError(f"SSM backend update failed with status {status}.")
+    raise TimeoutError("Timed out waiting for SSM backend update.")
+
 # ─── 4. Wait for Health Check ─────────────────────────────────────────────────
 def wait_for_health(public_ip: str):
     health_url = f"http://{public_ip}:8000/api/health"
@@ -236,6 +291,7 @@ def main():
 
     # Step 3: Launch backend EC2
     inst_id, public_ip = launch_backend_ec2(session)
+    update_existing_backend_ec2(session, inst_id)
 
     # Save backend URL (use CloudFront HTTPS to prevent browser mixed content blocking)
     cloudfront_domain = "https://dw5virp5mxy8d.cloudfront.net"
@@ -256,9 +312,9 @@ def main():
     print(">> HACKPILOT IS LIVE!")
     print("="*70)
     print(f"  Frontend (AWS Amplify): {amplify_url}")
-    print(f"  Backend API (FastAPI):  {backend_api_url}")
+    print(f"  Backend API (FastAPI):  {cloudfront_domain}/api")
     print(f"  API Docs (Swagger UI):  http://{public_ip}:8000/docs")
-    print(f"  Health Check:           {backend_api_url}/health")
+    print(f"  Health Check:           {cloudfront_domain}/api/health")
     print("="*70)
 
 if __name__ == "__main__":

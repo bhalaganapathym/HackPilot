@@ -12,6 +12,7 @@ HackPilot turns hackathon friction into an engaging, gamified experience while g
    - **Idea Duel:** Head-to-head architectural trade-off comparison across 5 dimensions with zero arbitrary winners.
    - **60-Second Rapid Fire:** Timed 60s elevator pitch practice with segment coaching tips and 7-dimension AI scoring.
    - **Pitch Deck Analyzer:** Slide-by-slide PDF pitch deck analysis, evidence gap detection, and judge prep.
+   - **Profiles, Social Graph & Leaderboards:** Supabase-backed authentication, public profiles, profile editing, follow/friend relationships, and XP leaderboards.
 2. **For Organizers:** Automated submission ingestion, semantic clustering via Amazon Titan Text Embeddings V2 & K-Means, Differentiation Dossiers, and evidence-backed Judge Dossiers with custom questions.
 
 ---
@@ -115,11 +116,21 @@ Open **`http://localhost:3000`** in your browser.
 | `AWS_PROFILE` | `hackpilot` | Local AWS CLI profile name (leave empty in cloud deployment) |
 | `S3_BUCKET_NAME` | `hackpilot-dev-artifacts-...` | Durable object storage bucket |
 | `DYNAMODB_TABLE_NAME`| `hackpilot-dev-submissions` | Dual persistence DynamoDB table |
+| `SUPABASE_URL` | `https://your-project-ref.supabase.co` | Supabase project URL for backend token validation |
+| `SUPABASE_ANON_KEY` | `your-public-anon-key` | Supabase public anon key used by backend token validation |
 
 ### Frontend (`frontend/.env.local`)
 | Variable | Value | Description |
 | :--- | :--- | :--- |
 | `NEXT_PUBLIC_API_URL` | `https://dw5virp5mxy8d.cloudfront.net/api` | Live production HTTPS backend API endpoint |
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://your-project-ref.supabase.co` | Supabase project URL for browser auth |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `your-public-anon-key` | Supabase public anon key for browser auth |
+
+See also:
+
+- `docs/AUTH_SETUP.md`
+- `docs/PROFILE_SOCIAL.md`
+- `docs/LEADERBOARD.md`
 
 ---
 
@@ -187,4 +198,5 @@ HackPilot is engineered to minimize AWS costs and stay strictly within the AWS F
 - **Demo Video Analyzer Intentionally Excluded:** Video transcription/computer vision (AWS Transcribe, Rekognition) is deliberately excluded from scope to prevent uncontrolled cloud billing, high processing latencies (>2 minutes/submission), and heavy dependencies. Pitch evaluation is focused on text, slide decks (pypdf), and timed Q&A rehearsal.
 - **Model Context Clamping:** Prompts are defensively truncated at 5,000–12,000 characters to prevent prompt injection and token budget overruns.
 - **Single-Table DynamoDB Schema:** Optimized for submission indexing and organizer queries; fine-grained user authentication (Cognito) is intentionally decoupled as per project architecture rules.
+- **Supabase Auth Integration:** Supabase is used for authentication identity only. HackPilot profile, social, and gamification state remain application-owned; production DynamoDB profile/social migration requires an explicit AWS checkpoint.
 - **WebSocket Streaming:** Real-time AI thinking tokens utilize high-speed polling / Server-Sent Events rather than persistent WebSockets to maximize compatibility with serverless and CDN edge caching.

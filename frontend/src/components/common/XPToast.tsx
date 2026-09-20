@@ -22,17 +22,17 @@ export const XPToast: React.FC<XPToastProps> = ({
       <AnimatePresence>
         {xp && xp > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+            initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, y: -20, scale: 0.85 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             onAnimationComplete={() => {
               if (onDone) setTimeout(onDone, 2500);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-accent-green/30 shadow-lg text-accent-green font-mono font-semibold text-sm"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyber-yellow text-black font-mono font-black text-sm shadow-yellow-glow border border-black/20"
           >
-            <Sparkles size={14} />
-            <span>+{xp} XP</span>
+            <Sparkles size={16} className="fill-black" />
+            <span>+{xp} XP EARNED</span>
           </motion.div>
         )}
 
@@ -41,14 +41,14 @@ export const XPToast: React.FC<XPToastProps> = ({
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-surface border border-accent-amber/40 shadow-xl text-text-primary"
+            className="flex items-center gap-3 px-5 py-3 rounded-[32px] bg-void-charcoal/95 border border-cyber-yellow/40 shadow-2xl backdrop-blur-2xl text-white"
           >
-            <div className="w-8 h-8 rounded-xl bg-accent-amber/15 text-accent-amber flex items-center justify-center">
-              <Trophy size={16} />
+            <div className="w-10 h-10 rounded-full bg-cyber-yellow text-black flex items-center justify-center font-black shadow-yellow-glow">
+              <Trophy size={18} />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-semibold text-accent-amber uppercase tracking-wider">Level Up!</span>
-              <span className="text-sm font-bold text-text-primary">Reached Level {newLevel || 2}</span>
+              <span className="text-[10px] font-mono font-black text-cyber-yellow uppercase tracking-widest">Level Up!</span>
+              <span className="text-sm font-extrabold text-white">Reached Level {newLevel || 2}</span>
             </div>
           </motion.div>
         )}

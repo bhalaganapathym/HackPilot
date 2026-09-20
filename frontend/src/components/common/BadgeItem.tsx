@@ -40,14 +40,14 @@ export const BadgeItem: React.FC<BadgeItemProps> = ({
   };
 
   return (
-    <div className="flex items-center gap-2.5 p-2 rounded-xl bg-fill/50 border border-border/50">
+    <div className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:border-cyber-yellow/40 transition-colors">
       <div
         className={`relative flex items-center justify-center rounded-xl border transition-all ${
           size === "sm" ? "w-8 h-8" : "w-10 h-10"
         } ${
           unlocked
-            ? "bg-accent-amber/10 border-accent-amber/30 text-accent-amber"
-            : "bg-surface border-border text-text-tertiary opacity-60"
+            ? "bg-cyber-yellow text-black border-cyber-yellow shadow-yellow-glow font-bold"
+            : "bg-white/5 border-white/10 text-zinc-500 opacity-60"
         }`}
       >
         {unlocked ? getIcon() : <Lock size={size === "sm" ? 12 : 15} />}
@@ -66,10 +66,10 @@ export const BadgeItem: React.FC<BadgeItemProps> = ({
       </div>
 
       <div className="flex flex-col min-w-0">
-        <span className={`font-medium truncate ${size === "sm" ? "text-xs" : "text-sm"} ${unlocked ? "text-text-primary" : "text-text-muted"}`}>
+        <span className={`font-bold truncate ${size === "sm" ? "text-xs" : "text-sm"} ${unlocked ? "text-white" : "text-zinc-500"}`}>
           {name}
         </span>
-        <span className="text-[11px] text-text-muted truncate max-w-[170px]">
+        <span className="text-[10px] text-zinc-400 truncate max-w-[170px]">
           {description}
         </span>
       </div>

@@ -208,11 +208,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -10 }}
             transition={{ duration: 0.15 }}
-            className="relative w-full max-w-lg rounded-2xl bg-surface border border-border shadow-popover overflow-hidden z-10"
+            className="relative w-full max-w-lg rounded-[32px] bg-void-charcoal/95 border border-white/20 shadow-2xl backdrop-blur-2xl overflow-hidden z-10 text-white"
           >
             {/* Search Input Bar */}
-            <div className="flex items-center px-4 py-3 border-b border-border">
-              <Search size={18} className="text-text-muted shrink-0" />
+            <div className="flex items-center px-5 py-4 border-b border-white/10">
+              <Search size={18} className="text-cyber-yellow shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
@@ -222,21 +222,21 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   setQuery(e.target.value);
                   setSelectedIndex(0);
                 }}
-                className="w-full ml-3 bg-transparent text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none"
+                className="w-full ml-3 bg-transparent text-sm text-white placeholder:text-zinc-500 focus:outline-none font-medium"
               />
               <button
                 type="button"
                 onClick={onClose}
-                className="text-text-muted hover:text-text-primary p-1 rounded-md"
+                className="text-zinc-400 hover:text-white p-1 rounded-full hover:bg-white/10"
               >
                 <X size={16} />
               </button>
             </div>
 
             {/* Actions List */}
-            <div className="max-h-72 overflow-y-auto p-2">
+            <div className="max-h-72 overflow-y-auto p-3 space-y-1">
               {filtered.length === 0 ? (
-                <div className="px-4 py-6 text-center text-xs text-text-muted">
+                <div className="px-4 py-8 text-center text-xs text-zinc-400">
                   No matching commands found.
                 </div>
               ) : (
@@ -249,17 +249,21 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       type="button"
                       onClick={() => action.perform()}
                       onMouseEnter={() => setSelectedIndex(idx)}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors ${
+                      className={`w-full flex items-center justify-between px-4 py-2.5 rounded-full text-left transition-all ${
                         isSelected
-                          ? "bg-fill text-text-primary"
-                          : "text-text-muted hover:text-text-primary"
+                          ? "bg-cyber-yellow text-black font-bold shadow-sm"
+                          : "text-zinc-300 hover:bg-white/5"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <Icon size={16} className={isSelected ? "text-text-primary" : "text-text-muted"} />
-                        <span className="text-sm font-medium">{action.title}</span>
+                        <Icon size={16} className={isSelected ? "text-black" : "text-zinc-400"} />
+                        <span className="text-xs font-semibold">{action.title}</span>
                       </div>
-                      <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-md border border-border bg-surface text-text-tertiary">
+                      <span className={`text-[10px] uppercase font-mono px-2.5 py-0.5 rounded-full border ${
+                        isSelected
+                          ? "border-black/20 bg-black/10 text-black font-bold"
+                          : "border-white/10 bg-white/5 text-zinc-400"
+                      }`}>
                         {action.category}
                       </span>
                     </button>
@@ -268,9 +272,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               )}
             </div>
 
-            <div className="px-4 py-2 bg-fill/50 border-t border-border flex items-center justify-between text-[11px] text-text-tertiary">
-              <span>Use ↑↓ to navigate, Enter to select, Esc to close</span>
-              <span>⌘K</span>
+            <div className="px-5 py-3 bg-black/40 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+              <span>↑↓ navigate · Enter select · Esc close</span>
+              <span className="text-cyber-yellow">⌘K</span>
             </div>
           </motion.div>
         </div>

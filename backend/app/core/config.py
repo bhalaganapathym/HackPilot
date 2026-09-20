@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     # Amazon DynamoDB
     DYNAMODB_TABLE_NAME: str = "hackpilot-dev-submissions"
 
+    # Supabase Auth
+    SUPABASE_URL: Optional[str] = None
+    SUPABASE_ANON_KEY: Optional[str] = None
+
     # Input size limits (character counts — cost and abuse protection)
     MAX_ABSTRACT_LENGTH: int = 5000
     MAX_PROBLEM_LENGTH: int = 8000

@@ -159,35 +159,35 @@ export default function RedTeamPage() {
   return (
     <div
       ref={containerRef}
-      className={`space-y-10 pb-16 transition-transform duration-200 ${
+      className={`max-w-[1200px] w-full mx-auto px-4 sm:px-8 py-8 space-y-10 transition-transform duration-200 ${
         screenShake ? "animate-bounce" : ""
       }`}
     >
       {/* Top Banner / Theme Header */}
-      <div className="gsap-fade-in">
-        <div className="flex items-center gap-2 text-xs font-mono font-semibold text-accent-coral uppercase tracking-wider mb-1">
+      <div className="gsap-fade-in space-y-2">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono font-bold text-rose-400 uppercase tracking-widest">
           <ShieldAlert size={14} />
           <span>Idea Red Team Arena</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-text-primary mb-2">
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight">
           Stress-test your idea before the grand jury does.
         </h1>
-        <p className="text-sm sm:text-base text-text-muted max-w-xl">
+        <p className="text-sm sm:text-base text-zinc-400 max-w-2xl leading-relaxed">
           We attack your architecture across 7 failure domains. Defend against each vector to preserve survival HP, earn XP, and unlock the Unbreakable badge.
         </p>
       </div>
 
       {/* Input Box */}
-      <div className="gsap-fade-in rounded-3xl bg-surface border border-border p-6 shadow-card space-y-4">
+      <div className="gsap-fade-in rounded-[32px] bg-void-charcoal/80 border border-white/10 p-7 sm:p-8 shadow-2xl backdrop-blur-xl space-y-5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+          <label className="text-xs font-bold uppercase tracking-widest text-zinc-400">
             Project Concept / Architecture
           </label>
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setShowOptions(!showOptions)}
-              className="text-xs font-medium text-text-muted hover:text-text-primary flex items-center gap-1 focus-visible:outline-none"
+              className="text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-1.5 focus-visible:outline-none px-3 py-1.5 rounded-full bg-white/5 border border-white/10"
             >
               <Sliders size={12} />
               <span>Options ({intensity})</span>
@@ -198,9 +198,9 @@ export default function RedTeamPage() {
                 setIdeaText(DEMO_RED_TEAM_IDEA);
                 setErrorMessage(null);
               }}
-              className="text-xs font-medium text-accent-coral hover:underline focus-visible:outline-none"
+              className="text-xs font-bold text-cyber-yellow hover:underline focus-visible:outline-none"
             >
-              Load sample idea
+              Load Sample Idea
             </button>
           </div>
         </div>
@@ -210,9 +210,9 @@ export default function RedTeamPage() {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="p-3 rounded-2xl bg-fill/50 border border-border space-y-1"
+            className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2"
           >
-            <span className="text-[11px] font-medium text-text-muted block">
+            <span className="text-xs font-bold text-zinc-300 block">
               Adversary Scrutiny Intensity:
             </span>
             <SegmentedControl<RedTeamIntensity>
@@ -233,11 +233,11 @@ export default function RedTeamPage() {
           value={ideaText}
           onChange={(e) => setIdeaText(e.target.value)}
           placeholder="Describe your project concept, technologies, and target workflow..."
-          className="w-full p-4 rounded-2xl bg-fill/50 border border-border/70 text-text-primary placeholder:text-text-tertiary text-sm leading-relaxed focus:bg-surface focus:outline-none focus:border-accent-coral transition-all resize-y"
+          className="w-full p-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-zinc-500 text-sm leading-relaxed focus:bg-white/10 focus:outline-none focus:border-rose-500 transition-all resize-y"
         />
 
         {errorMessage && (
-          <div className="flex items-center gap-2 text-xs text-accent-coral bg-accent-coral/10 p-3 rounded-xl border border-accent-coral/20">
+          <div className="flex items-center gap-2 text-xs text-rose-400 bg-rose-500/10 p-3 rounded-2xl border border-rose-500/20">
             <AlertTriangle size={14} />
             <span>{errorMessage}</span>
           </div>
@@ -245,13 +245,14 @@ export default function RedTeamPage() {
 
         <div className="flex items-center justify-between pt-2">
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleStartAttack}
             disabled={loading}
-            className="h-11 px-6 rounded-2xl bg-accent-coral text-white font-semibold text-sm shadow-sm hover:bg-accent-coral/90 disabled:opacity-50 transition-all flex items-center gap-2 focus-visible:outline-none"
+            className="h-12 px-8 rounded-full bg-rose-500 text-white font-extrabold text-sm shadow-md hover:bg-rose-600 disabled:opacity-50 transition-all flex items-center gap-2 focus-visible:outline-none"
           >
             <span>{loading ? "Priming Attacks..." : "Launch Red Team Stress-Test"}</span>
-            <ArrowRight size={15} />
+            <ArrowRight size={16} />
           </motion.button>
         </div>
       </div>
@@ -273,7 +274,7 @@ export default function RedTeamPage() {
             className="space-y-6"
           >
             {/* Arena Header: Slim HP Bar + Mascot State */}
-            <div className="rounded-3xl bg-surface border border-border p-6 shadow-card flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="rounded-[32px] bg-void-charcoal/85 border border-white/10 p-7 shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="w-full sm:max-w-md">
                 <SegmentedHpBar currentHp={currentHp} maxHp={100} segments={10} />
               </div>
@@ -298,10 +299,11 @@ export default function RedTeamPage() {
                       : undefined
                   }
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowAllAttacksSheet(true)}
-                  className="px-3 py-1.5 rounded-xl border border-border text-xs font-medium text-text-muted hover:text-text-primary hover:bg-fill transition-colors flex items-center gap-1.5 focus-visible:outline-none"
+                  className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-xs font-bold text-zinc-300 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-1.5 focus-visible:outline-none"
                 >
                   <Layers size={13} />
                   <span>All Attacks ({battle.attacks.length})</span>
@@ -311,20 +313,20 @@ export default function RedTeamPage() {
 
             {/* Focused Attack Card (Boss Moment) */}
             {currentAttack && !isBattleComplete && (
-              <div className="rounded-3xl bg-surface border border-border p-6 shadow-card space-y-5">
+              <div className="rounded-[32px] bg-void-charcoal/85 border border-white/10 p-7 sm:p-8 shadow-2xl space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-semibold text-text-tertiary">
+                    <span className="text-xs font-mono font-bold text-cyber-yellow">
                       Attack {currentAttackIdx + 1} of {battle.attacks.length}
                     </span>
-                    <span className="text-text-tertiary">·</span>
-                    <span className="text-xs text-text-muted font-medium">
+                    <span className="text-zinc-500">·</span>
+                    <span className="text-xs text-zinc-400 font-bold uppercase tracking-wider">
                       {currentAttack.domain}
                     </span>
                   </div>
 
                   <span
-                    className={`text-[11px] font-mono font-bold uppercase px-2.5 py-0.5 rounded-full border ${getSeverityBadge(
+                    className={`text-[11px] font-mono font-bold uppercase px-3 py-1 rounded-full border ${getSeverityBadge(
                       currentAttack.severity
                     )}`}
                   >
@@ -333,26 +335,26 @@ export default function RedTeamPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-text-primary mb-1">
+                  <h3 className="text-xl sm:text-2xl font-black text-white mb-2">
                     {currentAttack.title}
                   </h3>
-                  <p className="text-sm text-text-muted leading-relaxed">
+                  <p className="text-sm text-zinc-300 leading-relaxed">
                     {currentAttack.scenario}
                   </p>
                 </div>
 
                 {/* Defense Input Form */}
-                <div className="space-y-3 pt-2">
+                <div className="space-y-4 pt-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                    <label className="text-xs font-bold uppercase tracking-widest text-zinc-400">
                       Your Architectural Rebuttal
                     </label>
                     <button
                       type="button"
                       onClick={() => setDefenseText(DEMO_ATTACK_DEFENSE)}
-                      className="text-xs font-medium text-accent-coral hover:underline focus-visible:outline-none"
+                      className="text-xs font-bold text-cyber-yellow hover:underline focus-visible:outline-none"
                     >
-                      Fill sample defense
+                      Fill Sample Defense
                     </button>
                   </div>
 
@@ -361,7 +363,7 @@ export default function RedTeamPage() {
                     value={defenseText}
                     onChange={(e) => setDefenseText(e.target.value)}
                     placeholder="Articulate your concrete fallback, circuit breaker, caching layer, or encryption standard..."
-                    className="w-full p-4 rounded-2xl bg-fill/50 border border-border/70 text-text-primary placeholder:text-text-tertiary text-sm leading-relaxed focus:bg-surface focus:outline-none focus:border-accent-coral transition-all resize-y"
+                    className="w-full p-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-zinc-500 text-sm leading-relaxed focus:bg-white/10 focus:outline-none focus:border-rose-500 transition-all resize-y"
                   />
 
                   {/* Defense Result Feedback if submitted */}
@@ -369,48 +371,50 @@ export default function RedTeamPage() {
                     <motion.div
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded-2xl bg-fill/60 border border-border space-y-2 text-xs"
+                      className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2 text-xs"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-text-primary">
+                        <span className="font-bold text-white">
                           Defense Rating: {currentResult.rating}/10
                         </span>
-                        <span className="font-mono text-accent-green font-semibold">
+                        <span className="font-mono text-cyber-yellow font-bold text-sm">
                           +{currentResult.hp_change} HP Recovery
                         </span>
                       </div>
-                      <p className="text-text-muted">{currentResult.feedback}</p>
+                      <p className="text-zinc-300">{currentResult.feedback}</p>
                     </motion.div>
                   )}
 
                   <div className="flex items-center justify-between pt-2">
                     {!currentResult ? (
                       <motion.button
-                        whileTap={{ scale: 0.97 }}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={handleDefend}
                         disabled={defending || !defenseText.trim()}
-                        className="h-10 px-5 rounded-2xl bg-accent-coral text-white font-medium text-xs shadow-sm hover:bg-accent-coral/90 disabled:opacity-50 transition-all flex items-center gap-1.5 focus-visible:outline-none"
+                        className="h-11 px-7 rounded-full bg-cyber-yellow text-black font-extrabold text-xs shadow-yellow-glow hover:bg-cyber-yellow-hover disabled:opacity-50 transition-all flex items-center gap-2 focus-visible:outline-none"
                       >
-                        <ShieldCheck size={14} />
-                        <span>{defending ? "Evaluating..." : "Submit Defense"}</span>
+                        <ShieldCheck size={16} />
+                        <span>{defending ? "Evaluating Architecture..." : "Submit Defense Rebuttal"}</span>
                       </motion.button>
                     ) : (
                       <div className="flex items-center gap-2">
                         {currentAttackIdx < battle.attacks.length - 1 ? (
                           <motion.button
-                            whileTap={{ scale: 0.97 }}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => {
                               setCurrentAttackIdx((prev) => prev + 1);
                               setDefenseText("");
                             }}
-                            className="h-10 px-5 rounded-2xl bg-text-primary text-bg font-semibold text-xs shadow-sm transition-all flex items-center gap-1.5 focus-visible:outline-none"
+                            className="h-11 px-7 rounded-full bg-white text-black font-extrabold text-xs shadow-md transition-all flex items-center gap-2 focus-visible:outline-none active:scale-95"
                           >
-                            <span>Next Attack</span>
-                            <ChevronRight size={14} />
+                            <span>Next Attack Vector</span>
+                            <ChevronRight size={15} />
                           </motion.button>
                         ) : (
-                          <span className="text-xs font-semibold text-accent-green flex items-center gap-1">
-                            <CheckCircle2 size={13} />
+                          <span className="text-xs font-mono font-bold text-cyber-yellow flex items-center gap-1.5 px-4 py-2 rounded-full bg-cyber-yellow/10 border border-cyber-yellow/20">
+                            <CheckCircle2 size={15} />
                             All attacks faced!
                           </span>
                         )}

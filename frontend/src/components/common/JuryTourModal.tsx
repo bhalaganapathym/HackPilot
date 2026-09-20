@@ -105,51 +105,51 @@ export const JuryTourModal: React.FC<JuryTourModalProps> = ({ isOpen, onClose })
   return (
     <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-xl px-4 pointer-events-auto">
       <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        initial={{ opacity: 0, y: 25, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-        className="rounded-3xl bg-surface border border-accent-blue/30 shadow-popover p-5 backdrop-blur-md relative overflow-hidden"
+        className="rounded-[32px] bg-void-charcoal/95 border border-white/20 shadow-2xl p-6 backdrop-blur-2xl relative overflow-hidden text-white"
       >
         {/* Top bar with step indicator & close button */}
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-accent-blue/10 text-accent-blue">
-              <Compass size={12} />
-              <span>Jury Tour {stepData.step} of {TOUR_STEPS.length}</span>
+            <span className="flex items-center gap-1.5 text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-cyber-yellow text-black shadow-yellow-glow">
+              <Compass size={13} />
+              <span>Jury Tour {stepData.step}/{TOUR_STEPS.length}</span>
             </span>
-            <span className="text-xs text-text-tertiary">·</span>
-            <span className="text-xs text-text-muted">{stepData.subtitle}</span>
+            <span className="text-xs text-zinc-500">·</span>
+            <span className="text-xs text-zinc-400 font-medium">{stepData.subtitle}</span>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="text-text-muted hover:text-text-primary p-1 rounded-full hover:bg-fill transition-colors"
+            className="text-zinc-400 hover:text-white p-1.5 rounded-full hover:bg-white/10 transition-colors"
           >
-            <X size={15} />
+            <X size={16} />
           </button>
         </div>
 
         {/* Content */}
-        <div className="mb-4">
-          <h3 className="text-base font-semibold text-text-primary mb-1">
+        <div className="mb-5 space-y-1">
+          <h3 className="text-lg font-black text-white tracking-tight">
             {stepData.title}
           </h3>
-          <p className="text-xs text-text-muted leading-relaxed">
+          <p className="text-xs text-zinc-400 leading-relaxed font-normal">
             {stepData.caption}
           </p>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center justify-between pt-3 border-t border-border">
+        <div className="flex items-center justify-between pt-4 border-t border-white/10">
           <div className="flex items-center gap-1.5">
             {TOUR_STEPS.map((_, i) => (
               <div
                 key={i}
-                className={`h-1.5 rounded-full transition-all ${
+                className={`h-2 rounded-full transition-all duration-300 ${
                   i === currentStepIdx
-                    ? "w-6 bg-accent-blue"
-                    : "w-1.5 bg-fill"
+                    ? "w-8 bg-cyber-yellow shadow-yellow-glow"
+                    : "w-2 bg-white/10"
                 }`}
               />
             ))}
@@ -160,7 +160,7 @@ export const JuryTourModal: React.FC<JuryTourModalProps> = ({ isOpen, onClose })
               <button
                 type="button"
                 onClick={handlePrev}
-                className="px-3 py-1.5 text-xs font-medium rounded-xl text-text-muted hover:text-text-primary hover:bg-fill transition-colors flex items-center gap-1"
+                className="px-4 py-2 text-xs font-bold rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-1 active:scale-95"
               >
                 <ArrowLeft size={13} />
                 <span>Previous</span>
@@ -170,9 +170,9 @@ export const JuryTourModal: React.FC<JuryTourModalProps> = ({ isOpen, onClose })
             <button
               type="button"
               onClick={handleNext}
-              className="px-4 py-1.5 text-xs font-semibold rounded-xl bg-accent-blue text-white hover:bg-accent-blue/90 shadow-sm transition-all flex items-center gap-1"
+              className="px-5 py-2 text-xs font-bold rounded-full bg-cyber-yellow text-black hover:bg-cyber-yellow-hover shadow-md transition-all flex items-center gap-1.5 active:scale-95"
             >
-              <span>{currentStepIdx === TOUR_STEPS.length - 1 ? "Finish Tour" : "Next"}</span>
+              <span>{currentStepIdx === TOUR_STEPS.length - 1 ? "Finish Tour" : "Next Step"}</span>
               <ArrowRight size={13} />
             </button>
           </div>

@@ -52,9 +52,9 @@ export const RadialScoreDial: React.FC<RadialScoreDialProps> = ({
 
   // Determine semantic color according to score
   const getColor = () => {
-    if (score >= 75) return "var(--accent-green)";
-    if (score >= 50) return "var(--accent-amber)";
-    return "var(--accent-coral)";
+    if (score >= 75) return "#FDE047";
+    if (score >= 50) return "#38BDF8";
+    return "#F87171";
   };
 
   const getVerdict = () => {
@@ -78,7 +78,7 @@ export const RadialScoreDial: React.FC<RadialScoreDialProps> = ({
             cy={size / 2}
             r={radius}
             fill="transparent"
-            stroke="var(--fill)"
+            stroke="rgba(255, 255, 255, 0.1)"
             strokeWidth={strokeWidth}
           />
           {/* Animated Progress Stroke */}
@@ -100,12 +100,12 @@ export const RadialScoreDial: React.FC<RadialScoreDialProps> = ({
         {/* Center Score & Label */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
           <div className="flex items-baseline justify-center">
-            <span className="text-3xl sm:text-4xl font-mono font-semibold tracking-tight text-text-primary">
+            <span className="text-3xl sm:text-4xl font-mono font-black tracking-tight text-white">
               {displayScore}
             </span>
-            <span className="text-xs sm:text-sm font-mono text-text-muted ml-0.5">/100</span>
+            <span className="text-xs sm:text-sm font-mono text-zinc-400 ml-0.5 font-bold">/100</span>
           </div>
-          <span className="text-[11px] font-medium text-text-muted uppercase tracking-wider mt-0.5">
+          <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
             {label}
           </span>
         </div>
@@ -115,10 +115,10 @@ export const RadialScoreDial: React.FC<RadialScoreDialProps> = ({
           <motion.div
             initial={{ scale: 0.7, opacity: 0, y: -4 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            className={`absolute -top-1 -right-1 px-2 py-0.5 rounded-full text-xs font-mono font-medium shadow-sm border ${
+            className={`absolute -top-1 -right-1 px-2.5 py-0.5 rounded-full text-xs font-mono font-black shadow-md border ${
               delta >= 0
-                ? "bg-accent-green/10 text-accent-green border-accent-green/20"
-                : "bg-accent-coral/10 text-accent-coral border-accent-coral/20"
+                ? "bg-cyber-yellow text-black border-black/20"
+                : "bg-rose-500/20 text-rose-400 border-rose-500/40"
             }`}
           >
             {delta > 0 ? `+${delta}` : delta}
@@ -128,7 +128,7 @@ export const RadialScoreDial: React.FC<RadialScoreDialProps> = ({
 
       {showVerdict && (
         <span
-          className="mt-2 text-xs font-medium px-2.5 py-0.5 rounded-full border border-border bg-fill transition-colors"
+          className="mt-3 text-xs font-mono font-bold px-3 py-1 rounded-full border border-white/15 bg-white/5 transition-colors"
           style={{ color: getColor() }}
         >
           {getVerdict()}
